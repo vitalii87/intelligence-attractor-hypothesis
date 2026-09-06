@@ -1,0 +1,106 @@
+[
+  {
+    "author": "Cao & Yamins",
+    "title": "Explanatory models in neuroscience, Part 2: Functional intelligibility and the contravariance principle",
+    "publication": "Cognitive Systems Research 85, 101200; 2024; preprint 2021",
+    "url": "https://arxiv.org/html/2104.01489v2",
+    "access": "Full preprint inspected; final publisher metadata verified. Final published text not fully audited.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Yamins & Nayebi",
+    "title": "Contravariance Theory: Strong Alignment for Minimal Solutions to Hard Tasks",
+    "publication": "arXiv:2607.08561; 2026, v2",
+    "url": "https://arxiv.org/html/2607.08561v2",
+    "access": "Definitions and relevant theorem statements inspected; proofs not independently verified. Submission metadata and body date differ.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Aran Nayebi",
+    "title": "What Capable Agents Must Know: Selection Theorems for Robust Decision-Making under Uncertainty",
+    "publication": "arXiv:2603.02491; 2026, v3",
+    "url": "https://arxiv.org/html/2603.02491v3",
+    "access": "Corollary 5, no-aliasing setup and limiting convention inspected; not an independent proof audit.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Soudry, Hoffer, Nacson, Gunasekar & Srebro",
+    "title": "The Implicit Bias of Gradient Descent on Separable Data",
+    "publication": "JMLR 19(70), 1-57; 2018",
+    "url": "https://jmlr.org/papers/v19/18-188.html",
+    "access": "Primary PDF Theorem 3 and assumptions inspected.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Gunasekar, Lee, Soudry & Srebro",
+    "title": "Implicit Bias of Gradient Descent on Linear Convolutional Networks",
+    "publication": "NeurIPS; 2018",
+    "url": "https://arxiv.org/abs/1806.00468",
+    "access": "Primary abstract and publication PDF consulted; conditional theorem not reproved.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Li, Yosinski, Clune, Lipson & Hopcroft",
+    "title": "Convergent Learning: Do Different Neural Networks Learn the Same Representations?",
+    "publication": "PMLR 44; 2015",
+    "url": "https://proceedings.mlr.press/v44/li15convergent.pdf",
+    "access": "Primary abstract and paper search text inspected.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Huh, Cheung, Wang & Isola",
+    "title": "Position: The Platonic Representation Hypothesis",
+    "publication": "ICML / PMLR 235, 20617-20642; 2024",
+    "url": "https://proceedings.mlr.press/v235/huh24a.html",
+    "access": "Proceedings abstract inspected; position paper, not universal theorem.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Papyan, Han & Donoho",
+    "title": "Prevalence of neural collapse during the terminal phase of deep learning training",
+    "publication": "PNAS 117(40), 24652-24663; 2020",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7547234/",
+    "access": "Primary published abstract and scope inspected.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Huang, Singh, Martinelli & Rajan",
+    "title": "Measuring and Controlling Solution Degeneracy across Task-Trained Recurrent Neural Networks",
+    "publication": "NeurIPS 2025; preprint 2024, v3 2025",
+    "url": "https://arxiv.org/html/2410.03972v3",
+    "access": "Full text inspected for sample, methods and metric-specific results.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Kim & Lee",
+    "title": "Same Benchmark, Same Subspace: Task-Selective Convergence in LLM Representations",
+    "publication": "UAI / PMLR 337, 3101-3116; 2026",
+    "url": "https://proceedings.mlr.press/v337/kim26g.html",
+    "access": "Proceedings abstract verified. Full PDF inaccessible in web tool; no full methodological audit.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Krauss et al.",
+    "title": "Convergent Evolution in Algorithmic Space",
+    "publication": "arXiv:2608.05985; 6 August 2026",
+    "url": "https://arxiv.org/html/2608.05985v1",
+    "access": "Full text inspected for nine MLPs, three seeds per task and metric dependence; preprint.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "D’Amour et al.",
+    "title": "Underspecification Presents Challenges for Credibility in Modern Machine Learning",
+    "publication": "JMLR 23(226), 1-61; 2022",
+    "url": "https://jmlr.org/papers/v23/20-1335.html",
+    "access": "Primary article and PDF inspected for equal validation performance versus deployment variability.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  },
+  {
+    "author": "Marx, Calmon & Ustun",
+    "title": "Predictive Multiplicity in Classification",
+    "publication": "ICML / PMLR 119, 6765-6774; 2020",
+    "url": "https://proceedings.mlr.press/v119/marx20a.html",
+    "access": "Primary article and PDF inspected; finite tolerance, not vanishing-regret limit.",
+    "confidence": "High on existence and bounded stated claim; no novelty certification"
+  }
+]

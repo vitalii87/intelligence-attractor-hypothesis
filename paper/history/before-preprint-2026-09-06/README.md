@@ -28,14 +28,6 @@ The flagship presents:
 
 **Strong IAH:** at a specified functional level, near-frontier diversity tends to zero and independent systems approach one limiting functional equivalence class.
 
-## Publication Edition
-
-[Version 0.1 - manuscript and complete PDF](paper/README.md) assembles the canonical statement and all five supporting appendices into a self-contained conceptual preprint. It is prepared locally for author review; no Zenodo record or DOI is claimed.
-
-Read the [origin of the hypothesis and AI assistance](PROVENANCE.md) and the [change log](CHANGELOG.md). The initial intuition preceded the author's acquaintance with related work; originality and priority are not established. The current source map is preliminary and AI-assisted.
-
-The publication text and its five appendices are licensed under [CC BY-NC-ND 4.0](paper/LICENSE.md). Arena, experiment software and other repository code are outside that license.
-
 ## Research Program
 
 1. [Experimental Program](ideas/experimental-program.md) — general methodology, metrics, controls, and falsifiers.

@@ -10,8 +10,6 @@
 
 This document is the stable public statement of the Intelligence Attractor Hypothesis (IAH). Supporting formal extensions, experimental protocols, speculative interpretations, and historical development are maintained separately.
 
-**Publication preparation:** Version 0.1 combines this statement with all five supporting appendices. See the [publication edition](../paper/README.md), [origin and AI-assistance disclosure](../PROVENANCE.md), and [version-specific interpretive notes](../paper/front-matter.md). The stronger motivating conjecture remains in Speculative Limits; source discovery does not establish novelty.
-
 ---
 
 ## Abstract

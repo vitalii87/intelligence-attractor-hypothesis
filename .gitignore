@@ -10,3 +10,5 @@ __pycache__/
 arena/state/
 arena/artifacts/
 arena/exports/
+paper/.build/
+tmp/preprint-runtime/

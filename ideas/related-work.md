@@ -2,9 +2,9 @@
 
 **Author:** Vitalii Zhyliaiev
 
-**Revision:** 2026-08
+**Revision:** Publication preparation, 2026-09-06
 
-**Status:** Research map; verified bibliography still required
+**Status:** Preliminary AI-assisted source map; author literature review incomplete
 
 [← Intelligence Attractor Hypothesis](intelligence-attractor-hypothesis.md)
 
@@ -14,7 +14,143 @@
 
 IAH must be positioned against existing work before any strong originality claim is made.
 
-This document is not yet a literature review. It records the research areas, comparison questions, and conceptual boundaries that require source-based investigation. Bibliographic details should be added only after verification from primary or authoritative sources.
+This document is not yet a literature review. It records the research areas, comparison questions, and conceptual boundaries that require source-based investigation. The source register below records bibliographic and selected-content checks; the remaining thematic questions are not represented as resolved.
+
+## Preliminary Source Register - AI-Assisted Audit, 6 September 2026
+
+This register supplements the research questions below. Sources were discovered and checked with AI assistance; this is not a completed author-conducted or systematic literature review. Each entry records the assistant's actual access level. Personal reading and independent proof verification by the author are not claimed. The comparisons are provisional and references to omitted work are welcome.
+
+The original thematic map is retained after the register. Its open review tasks remain open where the present source checks do not resolve them.
+
+### D-source 1. Cao & Yamins
+
+**Work:** [Explanatory models in neuroscience, Part 2: Functional intelligibility and the contravariance principle](https://arxiv.org/html/2104.01489v2). Cognitive Systems Research 85, 101200; 2024; preprint 2021.
+
+**Relationship to IAH:** Conceptual overlap: stronger task constraints can restrict the possible mechanisms. This is prior art for the broad constraint-driven convergence intuition. A general matched-regret causal origin analysis is not established by the inspected preprint.
+
+**Assistant verification:** Full preprint inspected; final publisher metadata verified. Final published text not fully audited.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 2. Yamins & Nayebi
+
+**Work:** [Contravariance Theory: Strong Alignment for Minimal Solutions to Hard Tasks](https://arxiv.org/html/2607.08561v2). arXiv:2607.08561; 2026, v2.
+
+**Relationship to IAH:** The paper gives exact, asymptotic and quantitative alignment results under minimality and regularity assumptions. It also considers loss tolerance in a fixed macroarchitecture. Its terminal functional alignment requirements are stronger than equal scalar scores. Matched regret alone does not distinguish IAH from this work.
+
+**Assistant verification:** Definitions and relevant theorem statements inspected; proofs not independently verified. Submission metadata and body date differ.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 3. Aran Nayebi
+
+**Work:** [What Capable Agents Must Know: Selection Theorems for Robust Decision-Making under Uncertainty](https://arxiv.org/html/2603.02491v3). arXiv:2603.02491; 2026, v3.
+
+**Relationship to IAH:** Corollary 5 relates vanishing pair-regret, gamma-minimal memory and gamma-complete witnesses to equivalence of memory representations up to invertible recoding on the evaluation support. This directly overlaps with regret-linked internal convergence; it does not establish general monotonic decline of sampled diversity or causal origin effects in heterogeneous software lineages.
+
+**Assistant verification:** Corollary 5, no-aliasing setup and limiting convention inspected; not an independent proof audit.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 4. Soudry, Hoffer, Nacson, Gunasekar & Srebro
+
+**Work:** [The Implicit Bias of Gradient Descent on Separable Data](https://jmlr.org/papers/v19/18-188.html). JMLR 19(70), 1-57; 2018.
+
+**Relationship to IAH:** For separable linear prediction, gradient descent converges in direction to an L2 max-margin solution under the stated loss and step-size conditions, from any initialization. This is a special-case precedent for attenuation of initialization effects, not a universal result over architectures and optimizers.
+
+**Assistant verification:** Primary PDF Theorem 3 and assumptions inspected.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 5. Gunasekar, Lee, Soudry & Srebro
+
+**Work:** [Implicit Bias of Gradient Descent on Linear Convolutional Networks](https://arxiv.org/abs/1806.00468). NeurIPS; 2018.
+
+**Relationship to IAH:** Linear convolutional and fully connected parameterizations can induce different implicit biases under gradient descent. Initialization effects, architecture effects and optimizer effects must therefore be distinguished rather than combined into one assumed-to-vanish origin variable.
+
+**Assistant verification:** Primary abstract and publication PDF consulted; conditional theorem not reproved.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 6. Li, Yosinski, Clune, Lipson & Hopcroft
+
+**Work:** [Convergent Learning: Do Different Neural Networks Learn the Same Representations?](https://proceedings.mlr.press/v44/li15convergent.pdf). PMLR 44; 2015.
+
+**Relationship to IAH:** Independently trained networks can share features and subspaces while retaining differences in features and basis vectors. This is early empirical prior art for partial representational convergence.
+
+**Assistant verification:** Primary abstract and paper search text inspected.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 7. Huh, Cheung, Wang & Isola
+
+**Work:** [Position: The Platonic Representation Hypothesis](https://proceedings.mlr.press/v235/huh24a.html). ICML / PMLR 235, 20617-20642; 2024.
+
+**Relationship to IAH:** This position paper argues for representational convergence, with evidence across model scale and modalities, and hypothesizes a shared statistical model of reality. It is not a theorem of universal architectural uniqueness.
+
+**Assistant verification:** Proceedings abstract inspected; position paper, not universal theorem.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 8. Papyan, Han & Donoho
+
+**Work:** [Prevalence of neural collapse during the terminal phase of deep learning training](https://pmc.ncbi.nlm.nih.gov/articles/PMC7547234/). PNAS 117(40), 24652-24663; 2020.
+
+**Relationship to IAH:** Neural collapse describes a specific geometry of last-layer activations and classifiers in late training. It provides a concrete convergence phenomenon without establishing convergence of all internal levels or substrates.
+
+**Assistant verification:** Primary published abstract and scope inspected.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 9. Huang, Singh, Martinelli & Rajan
+
+**Work:** [Measuring and Controlling Solution Degeneracy across Task-Trained Recurrent Neural Networks](https://arxiv.org/html/2410.03972v3). NeurIPS 2025; preprint 2024, v3 2025.
+
+**Relationship to IAH:** Across 3,400 task-trained RNNs, increasing task complexity can reduce dynamical degeneracy while increasing permutation-aligned weight distance. Functional levels must be separated; weight distance is not automatically architectural functional distance.
+
+**Assistant verification:** Full text inspected for sample, methods and metric-specific results.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 10. Kim & Lee
+
+**Work:** [Same Benchmark, Same Subspace: Task-Selective Convergence in LLM Representations](https://proceedings.mlr.press/v337/kim26g.html). UAI / PMLR 337, 3101-3116; 2026.
+
+**Relationship to IAH:** The proceedings abstract reports task-selective alignment of linear readout geometry across 50 models from six families on three benchmarks. It concerns a selected subspace, not the whole architecture. Full methodological comparison remains pending.
+
+**Assistant verification:** Proceedings abstract verified. Full PDF inaccessible in web tool; no full methodological audit.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 11. Krauss et al.
+
+**Work:** [Convergent Evolution in Algorithmic Space](https://arxiv.org/html/2608.05985v1). arXiv:2608.05985; 6 August 2026.
+
+**Relationship to IAH:** Nine fixed-architecture MLPs, three initializations per task, show task-specific structural convergence under the proposed metrics, while Euclidean distances increase. The terminology of algorithmic attractors is prior art; this small preprint study does not test recursively mutable architectures.
+
+**Assistant verification:** Full text inspected for nine MLPs, three seeds per task and metric dependence; preprint.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 12. D’Amour et al.
+
+**Work:** [Underspecification Presents Challenges for Credibility in Modern Machine Learning](https://jmlr.org/papers/v23/20-1335.html). JMLR 23(226), 1-61; 2022.
+
+**Relationship to IAH:** Predictors with comparable validation performance can behave differently in deployment. Equal high scores alone do not establish functional equivalence outside the evaluated distribution.
+
+**Assistant verification:** Primary article and PDF inspected for equal validation performance versus deployment variability.
+
+**Author reading:** Not certified in this edition.
+
+### D-source 13. Marx, Calmon & Ustun
+
+**Work:** [Predictive Multiplicity in Classification](https://proceedings.mlr.press/v119/marx20a.html). ICML / PMLR 119, 6765-6774; 2020.
+
+**Relationship to IAH:** The study quantifies prediction disagreement among competing classifiers. It motivates actively searching for diverse near-optimal alternatives rather than inferring set-wide uniqueness from an optimization sample. Finite-tolerance multiplicity alone does not settle the zero-regret limit.
+
+**Assistant verification:** Primary article and PDF inspected; finite tolerance, not vanishing-regret limit.
+
+**Author reading:** Not certified in this edition.
 
 ## 1. Constrained and Multi-Objective Optimization
 

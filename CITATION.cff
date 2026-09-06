@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Please cite the specific IAH edition used. Version 0.1 is locally prepared and not yet deposited; no DOI has been assigned."
+type: article
+title: "The Intelligence Attractor Hypothesis: Independent Convergence Under Shared Reality Constraints"
+authors:
+  - family-names: Zhyliaiev
+    given-names: Vitalii
+version: "0.1"
+license: CC-BY-NC-ND-4.0
+url: "https://github.com/vitalii87/intelligence-attractor-hypothesis"
+abstract: "A developing conceptual hypothesis and research program on functional narrowing and origin attenuation near shared performance frontiers, with five supporting appendices. No empirical validation or peer review is claimed."
+keywords:
+  - intelligence attractor hypothesis
+  - functional convergence
+  - origin dependence
+  - architectural convergence
+  - optimization
