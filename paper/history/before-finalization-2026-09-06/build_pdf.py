@@ -11,31 +11,36 @@ from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer,PageBreak,Image,Table,TableStyle,KeepTogether,Flowable
 from reportlab.platypus.tableofcontents import TableOfContents
 from pypdf import PdfReader
-P = Path(__file__).resolve().parent
-ROOT = P.parent
-BUILD = P / '.build'
-BUILD.mkdir(exist_ok=True)
-files = [('main', 'Main Text', 'ideas/intelligence-attractor-hypothesis.md'), ('appendix-a', 'Appendix A - Origin Dependence and Attenuation', 'ideas/origin-dependence-and-attenuation.md'), ('appendix-b', 'Appendix B - Recursive Architectural Attractor', 'ideas/recursive-architectural-attractor.md'), ('appendix-c', 'Appendix C - Relational Narrowing and Strong Functional Uniqueness', 'ideas/relational-narrowing-and-strong-functional-uniqueness.md'), ('appendix-d', 'Appendix D - Preliminary Related Work Map', 'ideas/related-work.md'), ('appendix-e', 'Appendix E - Maximal and Philosophical Extensions', 'ideas/speculative-limits.md'), ('authorship', 'Authorship, Discussion, and Versioning', 'paper/authorship.md')]
-chapters = []
-for key, title, rel in files:
-    text = (ROOT / rel).read_text(encoding='utf-8')
-    body = re.sub(r'^# .+\n', '', text, count=1).strip()
-    chapters.append(dict(key=key, title=title, text=body))
-register = json.loads((P / 'source-register.json').read_text(encoding='utf-8'))
-reg = ['The following records preserve the scope of checks documented in the AI-assisted audit dated 6 September 2026. They are not a new independent literature audit. The author does not claim personal reading or independent proof verification of every listed source.']
-refs = []
-for i, item in enumerate(register, 1):
-    author = item['author'].rstrip('.')
-    title = item['title']
-    punctuation = '' if title.endswith(('?', '!', '.')) else '.'
-    refs.append(f"{i}. {author}. [{title}]({item['url']}){punctuation} {item['publication']}. Access recorded 6 September 2026.")
-    reg.append(f"## Source {i}. {author}\n\n[{title}]({item['url']})\n\n**AI-assisted audit scope:** {item['access']}")
-chapters.append(dict(key='source-register', title='Source Register - Recorded Audit Scope', text='\n\n'.join(reg)))
-chapters.append(dict(key='references', title='References', text='\n\n'.join(refs)))
-(P/'references.md').write_text('# References\n\n'+'\n\n'.join(refs)+'\n', encoding='utf-8')
-assembled = (P/'front-matter.md').read_text(encoding='utf-8').strip()+'\n\n'
-assembled += '\n\n'.join('# '+c['title']+'\n\n'+c['text'] for c in chapters)+'\n'
-(P/'manuscript.md').write_text(assembled, encoding='utf-8')
+P=Path(__file__).resolve().parent; ROOT=P.parent; BUILD=P/'.build'; BUILD.mkdir(exist_ok=True)
+BASE='https://github.com/vitalii87/intelligence-attractor-hypothesis/blob/main/'
+files=[('main','Main text - Canonical statement','ideas/intelligence-attractor-hypothesis.md'),('origin','Origin of the hypothesis and AI assistance','PROVENANCE.md'),('appendix-a','Appendix A - Origin Dependence and Attenuation','ideas/origin-dependence-and-attenuation.md'),('appendix-b','Appendix B - Recursive Architectural Attractor','ideas/recursive-architectural-attractor.md'),('appendix-c','Appendix C - Relational Narrowing and Strong Functional Uniqueness','ideas/relational-narrowing-and-strong-functional-uniqueness.md'),('appendix-d','Appendix D - Related Work Map','ideas/related-work.md'),('appendix-e','Appendix E - Speculative Limits','ideas/speculative-limits.md'),('references','References','paper/references.md')]
+pathkeys={f:k for k,t,f in files}
+def clean(text,src):
+    # Only remove standalone repository-navigation and repeated edition headers.
+    text=re.sub(r'^# .+\n','',text,count=1)
+    text=re.sub(r'^\[←.*?\n','',text,flags=re.M)
+    text=re.sub(r'^\*\*(Author|Initial formulation|Revision):\*\*.*\n','',text,flags=re.M)
+    text=re.sub(r'^\*\*Publication preparation:\*\*.*\n','',text,flags=re.M)
+    def links(m):
+        label,url=m.group(1),m.group(2)
+        if '://' in url or url.startswith('#'): return m.group(0)
+        resolved=(ROOT/src).parent.joinpath(url).resolve()
+        try: rel=resolved.relative_to(ROOT).as_posix()
+        except ValueError: raise ValueError('Link outside repository: '+url)
+        return '['+label+'](' + ('#'+pathkeys[rel] if rel in pathkeys else BASE+rel) + ')'
+    text=re.sub(r'\[([^\]]+)\]\(([^)]+)\)',links,text)
+    return text.strip()
+
+chapters=[dict(key='preface',title='Publication scope and interpretive notes',text=clean((P/'front-matter.md').read_text(encoding='utf-8'),'paper/front-matter.md'))]
+for k,t,f in files:
+    text=clean((ROOT/f).read_text(encoding='utf-8'),f)
+    if k.startswith('appendix-'):
+        letter=k[-1].upper()
+        text=re.sub(r'^## (\d+)\. ',lambda m:'## '+letter+'.'+m[1]+' ',text,flags=re.M)
+    chapters.append(dict(key=k,title=t,text=text))
+assembled='# The Intelligence Attractor Hypothesis\n\n'
+assembled+='\n\n'.join('# '+c['title']+'\n\n'+c['text'] for c in chapters)
+(P/'manuscript.md').write_text(assembled+'\n',encoding='utf-8')
 
 math={}
 def addmath(tex,display):
@@ -58,7 +63,7 @@ pdfmetrics.registerFontFamily('Text',normal='Text',bold='Text-Bold',italic='Text
 pdfmetrics.registerFontFamily('Sans',normal='Sans',bold='Sans-Bold',italic='Sans',boldItalic='Sans-Bold')
 WIDTH=A4[0]-100
 styles={
- 'body':ParagraphStyle('body',fontName='Text',fontSize=11,leading=14,spaceAfter=6),
+ 'body':ParagraphStyle('body',fontName='Text',fontSize=11,leading=15,spaceAfter=7),
  'small':ParagraphStyle('small',fontName='Text',fontSize=9.5,leading=12,spaceAfter=5),
  'quote':ParagraphStyle('quote',fontName='Text',fontSize=11,leading=15,leftIndent=16,rightIndent=8,spaceAfter=9,borderPadding=5,textColor=colors.HexColor('#183D4A')),
  'list':ParagraphStyle('list',fontName='Text',fontSize=11,leading=15,leftIndent=15,firstLineIndent=-12,spaceAfter=4),
@@ -131,49 +136,24 @@ def footer(c,d):
     c.drawString(50,27,'Zhyliaiev | Intelligence Attractor Hypothesis | v0.1')
     c.drawRightString(A4[0]-50,27,str(d.page))
 
-story = [Spacer(1, 54),
-    Paragraph('The Intelligence<br/>Attractor Hypothesis', styles['cover']),
-    para('Independent Convergence Under Shared Reality Constraints', 'subtitle'),
-    Spacer(1, 12), para('Vitalii Zhyliaiev', 'subtitle'),
-    para('Conceptual preprint and research program'),
-    para('Version 0.1'),
-    Spacer(1, 22),
-    para('Independent convergence, origin attenuation, mutable architecture, and the possibility of a unique limiting organization of intelligence.'),
-    Spacer(1, 12),
-    para('Includes the main text, Appendices A-E, and a preliminary AI-assisted source register and bibliography.'),
-    Spacer(1, 22),
-    para('Copyright 2026 Vitalii Zhyliaiev. [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).', 'small'),
-    para('The license covers the original publication text and appendices. Cited third-party works and repository software are outside this license.', 'small'),
-    para('[Project repository](https://github.com/vitalii87/intelligence-attractor-hypothesis)', 'small'),
-    PageBreak(), para('Contents', 'h1')]
-toc = TableOfContents()
-toc.levelStyles = [ParagraphStyle('toc-review', fontName='Text', fontSize=11, leading=17, spaceBefore=9)]
-story.extend([toc, PageBreak()])
-for n, c in enumerate(data['chapters']):
-    if n: story.append(PageBreak())
-    heading = para(c['title'], 'h1')
-    heading.chapter_key = c['key']
-    story.append(heading)
-    story += render(c['tokens'])
-dest = P / 'Intelligence-Attractor-Hypothesis-v0.1.pdf'
-doc = Doc(str(dest), pagesize=A4, leftMargin=50, rightMargin=50, topMargin=44, bottomMargin=47,
-    title='The Intelligence Attractor Hypothesis: Independent Convergence Under Shared Reality Constraints',
-    author='Vitalii Zhyliaiev', subject='Conceptual preprint and research program, version 0.1')
-doc.multiBuild(story, onFirstPage=footer, onLaterPages=footer)
-
-reader = PdfReader(dest)
-alltext = '\n'.join(page.extract_text() for page in reader.pages)
-assert len(reader.pages) > 10
-for forbidden in ['MATHINLINE', 'MATHBLOCK', 'author review', 'not deposited', 'no DOI assigned', 'web tool', 'Recorded assistant access:', 'Transient Coupling']:
-    assert forbidden.lower() not in alltext.lower(), forbidden
-assert 'CC BY-NC 4.0' in alltext
-assert len(register) == 13
-for chapter in chapters: assert chapter['title'] in alltext, chapter['title']
-manifest_sources = ['paper/front-matter.md','paper/source-register.json','paper/build_pdf.py','paper/render_math.cjs'] + [rel for _,_,rel in files]
-report = dict(pages=len(reader.pages), chapters=len(chapters), distinct_equations=len(math),
-    pdf_sha256=hashlib.sha256(dest.read_bytes()).hexdigest(),
-    source_files={rel:hashlib.sha256((ROOT/rel).read_bytes()).hexdigest() for rel in manifest_sources},
-    page_text_lengths=[len(page.extract_text()) for page in reader.pages])
-(P/'build-manifest.json').write_text(json.dumps(report,indent=2)+'\n', encoding='utf-8')
-(BUILD/'extracted.txt').write_text(alltext, encoding='utf-8')
+story=[Spacer(1,65),para('The Intelligence<br/>Attractor Hypothesis','cover')]
+# cover uses intentional HTML breaks, unlike normal source text
+story=[Spacer(1,65),Paragraph('The Intelligence<br/>Attractor Hypothesis',styles['cover']),para('Independent Convergence Under Shared Reality Constraints','subtitle'),Spacer(1,8),para('Vitalii Zhyliaiev','subtitle'),para('Conceptual preprint with five supporting appendices'),para('Version 0.1 | Prepared 6 September 2026'),Spacer(1,30),para('A developing hypothesis and research program. No empirical validation or peer review is claimed. The related-work map is preliminary and AI-assisted.'),Spacer(1,14),para('This edition preserves both the canonical functional hypotheses and the separately identified maximal conjecture of absolute architectural uniqueness.'),Spacer(1,14),para('[Project repository](https://github.com/vitalii87/intelligence-attractor-hypothesis)'),PageBreak(),para('Contents','h1')]
+toc=TableOfContents();toc.levelStyles=[ParagraphStyle('toc',fontName='Text',fontSize=11,leading=17,spaceBefore=9,leftIndent=0,firstLineIndent=0)]
+story.extend([toc,PageBreak()])
+for n,c in enumerate(data['chapters']):
+    if n:story.append(PageBreak())
+    heading=para(c['title'],'h1');heading.chapter_key=c['key'];story.append(heading)
+    story+=render(c['tokens'])
+dest=P/'IAH-v0.1.pdf'
+doc=Doc(str(dest),pagesize=A4,leftMargin=50,rightMargin=50,topMargin=44,bottomMargin=47,title='The Intelligence Attractor Hypothesis: Independent Convergence Under Shared Reality Constraints',author='Vitalii Zhyliaiev',subject='Conceptual preprint, version 0.1, with five appendices')
+doc.multiBuild(story,onFirstPage=footer,onLaterPages=footer)
+reader=PdfReader(str(dest)); alltext='\n'.join(x.extract_text() for x in reader.pages)
+assert len(reader.pages)>10
+assert 'MATHINLINE' not in alltext and 'MATHBLOCK' not in alltext
+for _,title,_ in files: assert title in alltext,title
+manifest_sources=['paper/front-matter.md']+[f for _,_,f in files]
+report={'pages':len(reader.pages),'math_expressions':len(math),'math_occurrences':len(re.findall('MATH(?:INLINE|BLOCK)', '\n'.join(c['parsed_source'] for c in chapters))),'pdf_sha256':hashlib.sha256(dest.read_bytes()).hexdigest(),'source_files':{f:hashlib.sha256((ROOT/f).read_bytes()).hexdigest() for f in manifest_sources},'page_text_lengths':[len(p.extract_text()) for p in reader.pages]}
+(P/'build-manifest.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+(BUILD/'extracted.txt').write_text(alltext,encoding='utf-8')
 print(json.dumps(report,indent=2))

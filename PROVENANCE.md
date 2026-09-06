@@ -24,4 +24,4 @@ The author welcomes references to overlooked prior work, precise overlaps, count
 
 ## Editorial boundary
 
-This edition preserves the canonical Weak/Strong IAH distinction and the full substantive scope of all five supporting documents. New editorial notes identify mathematical and literature-review limitations without silently replacing the author's claims. No empirical validation, peer review, institutional affiliation or academic acceptance is claimed.
+This edition preserves the canonical Weak/Strong IAH distinction and the full substantive scope of all five supporting documents. The author-approved revision states the common limiting class explicitly and distinguishes sampled diversity, set-wide concentration, origin effects, and exact architectural uniqueness. The change log records the revision and the final bounded clarifications. No empirical validation, peer review, institutional affiliation or academic acceptance is claimed.

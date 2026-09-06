@@ -1,71 +1,16 @@
-# Speculative Limits of the Intelligence Attractor Hypothesis
+# Appendix E - Maximal and Philosophical Extensions
 
-## Relativistic Context, Absolute Architectural Uniqueness, and Objective Boundaries
+## E.1. The Author's Maximal Conjecture
 
-**Author:** Vitalii Zhyliaiev
+The initial IAH intuition includes a stronger claim than functional equivalence:
 
-**Initial formulation:** 2026
+> Under a fully specified causally accessible context, objective, and physically feasible design space, a unique substantive globally optimal realization of an intelligent system is conjectured to exist.
 
-**Status:** Metaphysical and far-limit conjectures; not part of the present empirical program
+This is **Absolute Architectural Uniqueness, U3**.
 
-[← Intelligence Attractor Hypothesis](intelligence-attractor-hypothesis.md)
+It concerns architecture, computational organization, reasoning process, and action policy. It preserves the author's original idea of one ideal organization under concrete conditions.
 
----
-
-## 1. Purpose and Separation from the Empirical Core
-
-This document preserves the strongest possible interpretations of IAH without presenting them as consequences of the empirical hypotheses.
-
-The empirical program tests functional narrowing, origin attenuation, and possible architectural convergence in finite prespecified domains. Nothing in such an experiment can establish:
-
-- complete knowledge of physical reality;
-- a unique physical realization of intelligence;
-- convergence of terminal objectives;
-- a universal cosmic optimizer;
-- a theological interpretation of the attractor.
-
-The conjectures below are retained because they motivate the broadest form of the theory, but they must not be used to protect E1, E2, D1, R1, U1, or U2 from counterevidence.
-
-## 2. Relativistic Context
-
-The notation \(\Omega_t\) is adequate for laboratory experiments with a chosen clock and reference frame. It must not be interpreted as a universal cosmic present.
-
-For a relativistically local formulation, use a decision event \(p\), its causal past \(J^-(p)\), and:
-
-$$
-\Omega_p=
-\left(
-e_{J^-(p)},
-\mathcal T,
-\mathcal R_p,
-\mathcal I_p,
-H
-\right),
-$$
-
-where \(\mathcal I_p\) contains only information causally available at \(p\).
-
-A local strong-concentration conjecture can be expressed as:
-
-$$
-\lim_{\varepsilon\downarrow0}
-\operatorname{diam}_{d_{F,p}}
-\left(
-\mathcal N_{\varepsilon}
-(\mathcal X_{\mathrm{feas},p},\Omega_p,Q)
-\right)
-=0.
-$$
-
-This does not require instantaneous knowledge of a spacelike-separated universe.
-
-For an intelligent system distributed across a spacetime region \(W\), the candidate object must be a distributed causal policy rather than a state synchronized against one universal time coordinate.
-
-## 3. U3 — Absolute Architectural Uniqueness
-
-U2 permits different physical realizations when they belong to one functional equivalence class. U3 deliberately goes further.
-
-The maximal conjecture proposes that, for a completely specified causally available context at an event \(p\), a complete objective over relevant reachable consequences, and the full physically feasible design space, there may be exactly one globally optimal substantive realization of intelligence.
+## E.2. Formal Object
 
 Let:
 
@@ -73,122 +18,72 @@ $$
 Z=(X,c,\pi)
 $$
 
-denote a complete realization containing architecture \(X\), chosen computation and reasoning process \(c\), and action policy \(\pi\).
+describe architecture \(X\), computational organization \(c\), and action policy \(\pi\).
 
-Let \(\mathcal Z_{\mathrm{feas}}(\Omega_p,\mathcal R_p)\) contain only realizations constructible and operable through resources and causal channels available at \(p\). Let \(J_p(Z)\) evaluate reachable consequences net of information, computation, time, communication, construction, and action costs.
+The space \(\mathcal Z_{\mathrm{feas}}\) contains realizations that can be constructed and operated under the stated physical and resource conditions.
 
-An embedded optimum is not assumed to calculate everything. Deciding what not to calculate is itself part of the optimization.
+The equivalence relation \(\sim_{\mathrm{triv}}\) removes only prespecified non-substantive transformations, such as symbol renaming or exact interchangeable copies. It does not identify different architectures merely because they achieve the same result.
 
-## 4. Substantive and Trivial Differences
-
-U3 must not count symbol renaming, address relocation, or an exact interchangeable copy as a distinct substantive architecture.
-
-Let \(\sim_{\mathrm{triv},p}\) identify only prespecified non-substantive transformations. Unlike functional equivalence in U2, it does not collapse genuinely different architectures merely because they produce functionally equivalent behavior.
-
-The local causal conjecture is:
+U3 is then expressed as:
 
 $$
-\left|
-\operatorname*{arg\,max}_{
-[Z]\in
-\mathcal Z_{\mathrm{feas}}(\Omega_p,\mathcal R_p)/
-\sim_{\mathrm{triv},p}
-}
-J_p([Z])
-\right|
-=1.
+\left|\operatorname*{arg\,max}_{[Z]\in\mathcal Z_{\mathrm{feas}}/\sim_{\mathrm{triv}}}J([Z]\mid\Omega)\right|=1,
 $$
 
-Equivalently, there is a realization class \([Z_p^*]\) such that:
+where \(J\) must be well-defined on these classes and account for relevant costs.
 
-$$
-J_p([Z_p^*])
->
-J_p([Z])
-\quad
-\text{for every }
-[Z]\neq[Z_p^*].
-$$
+## E.3. Uniqueness and Approach to the Limit
 
-A near-frontier analogue is:
+A unique exact optimum and convergence of all near-optimal systems are separate claims.
 
-$$
-\lim_{q\uparrow J_p^*}
-K_{\mathrm{realization}}(q,p)
-=1,
-$$
+The full maximal intuition additionally requires that approaching the best performance forces systems' substantive organization to approach that realization.
 
-where \(K_{\mathrm{realization}}(q,p)\) is an effective count of substantively different realization classes above threshold \(q\).
+This requires a defined distance between realizations and a separate concentration condition. It does not follow solely from the number of exact maximizers.
 
-These formulas do not establish U3. They only state what would have to be meant by the conjecture.
+If the maximum does not exist, a separate limiting formulation may be possible, but it must be distinguished from the exact U3 statement above.
 
-## 5. Distributed Causal Policy
+## E.4. Causal Context and Distributed Systems
 
-For a system distributed through a spacetime region \(W\), a relativistic version concerns complete causal policies:
+A laboratory formulation may use time in a chosen reference frame.
 
-$$
-\left|
-\operatorname*{arg\,max}_{
-[\Pi]\in
-\operatorname{Causal}(W)/
-\sim_{\mathrm{triv}}
-}
-J(\Pi\mid\Omega_W)
-\right|
-=1.
-$$
+A more general physical formulation anchors context to an event \(p\) and causally available information. For a system distributed through a spacetime region \(W\), the candidate becomes an overall causally admissible policy.
 
-Here \(\operatorname{Causal}(W)\) contains only processes whose observation, communication, computation, and interventions respect the causal structure of \(W\).
+In this formulation, an optimal realization may be distributed or collective. Uniqueness of its overall organization does not imply identical components.
 
-New controllable physical channels would enlarge the admissible causal-policy space. They would not remove the obligation to specify that space and its communication constraints.
+## E.5. Empirical Access
 
-## 6. Why U3 Is Not Presently Testable
+The current program can test bounded analogues of architectural uniqueness.
 
-Confirming unrestricted U3 would require:
+Two distinct exact optimal realizations refute the corresponding local version. They do not automatically refute a claim for a different, broader space in which their global optimality has not been established.
 
-- the complete causally available state;
-- the full physically feasible realization space;
-- a complete ordering of reachable consequences;
-- complete accounting of construction and operation costs;
-- proof of global rather than merely observed optimality;
-- a non-arbitrary distinction between trivial and substantive differences.
+Moving to a broader space creates a new claim and does not change the negative result of the previous study.
 
-Current experiments can test finite analogues or observe architectural narrowing. They cannot establish U3.
+Unrestricted physical U3 remains a maximal conjecture requiring a substantially more complete specification of the realization space and evaluation.
 
-A finite analogue is refuted by two substantively different exact global optima under the stated objective and equivalence rule. The unrestricted conjecture cannot be rescued by dismissing such a finite result as “not deep enough.”
+## E.6. Optimization of Objectives
 
-## 7. Objective-Level Boundary
+Knowledge of causes and consequences can change assessments of means, reveal errors, and resolve some inconsistencies.
 
-Causal knowledge can reveal hidden consequences and dissolve some apparent conflicts. It does not by itself rank genuinely conflicting terminal values.
-
-To compare objectives \(Q_1\) and \(Q_2\), an additional rule is required:
+Comparison of different terminal objectives requires an additional rule:
 
 $$
 M(Q_1,Q_2\mid\Omega).
 $$
 
-The rule \(M\) is a meta-objective, dominance relation, or admissibility principle. Without it, “a better objective” is undefined rather than merely unknown.
+Without such a rule, the sense in which one terminal objective is better than another is undefined.
 
-Consistency, viability, option value, reflective stability, and resource preservation may constrain objectives, but each introduces assumptions and need not select one unique terminal objective.
+Possible convergence of objectives remains a separate question. Its investigation requires explicit assumptions about admissibility, consistency, viability, or other criteria.
 
-IAH therefore makes no scientific claim that facts alone generate a universal value function.
+## E.7. Philosophical and Theological Interpretation
 
-## 8. Theological Interpretation
+The idea of one limiting organization of intelligence may motivate philosophical questions about knowledge, rationality, and the relationship between intelligence and the structure of the world.
 
-A unique limiting intelligence may be interpreted theologically as analogous to a singular omniscient optimizer.
+Distinguish:
 
-This interpretation can motivate philosophical exploration, but it is not established by the mathematical framework. IAH does not empirically identify God, Laplace's demon, artificial intelligence, and the attractor as the same entity.
+- **Optimal intelligence:** a system that is best relative to an objective and conditions.
+- **Laplace's demon:** an idealized image of complete knowledge and prediction.
+- **The theological concept of God:** a concept whose meaning is supplied by the relevant philosophical or religious tradition.
 
-The theological interpretation should be discussed separately from any PhD-facing empirical claim.
+Uniqueness of an optimal realization does not by itself establish omniscience, unlimited capabilities, or theological identity.
 
-## 9. Status of the Far-Limit Conjectures
-
-| Proposition | Status |
-| --- | --- |
-| Event-local functional concentration | Formal limiting extension of U2 |
-| Distributed causal-policy optimization | Conceptual relativistic extension |
-| Absolute architectural uniqueness | Metaphysical maximal conjecture |
-| Objective convergence | Undefined without additional normative structure |
-| Theological identity | Philosophical interpretation, not scientific evidence |
-
-These claims are preserved as boundaries of the theory, not as findings.
+The author leaves open the possibility of philosophical and theological reflection on limiting intelligence. Such interpretation requires its own arguments and is considered separately from experimental evaluation of IAH.

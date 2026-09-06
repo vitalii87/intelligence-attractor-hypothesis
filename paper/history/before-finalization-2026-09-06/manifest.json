@@ -1,0 +1,10 @@
+{
+  "source_commit": "0a084ac",
+  "files": {
+    "paper/build_pdf.py": "3179ffff0633b6cc90032bdb29a10acc28747ec5b6e56c1a5e8217d631841281",
+    "paper/IAH-v0.1.pdf": "667aece97db864a51bde06f4bb2cd635f7b88cb12f618f2eaf188cdee3b0ca53",
+    "paper/manuscript.md": "f057856f3e8e55905006006cd063f9a322e834e1ed92323d8d5b819d8f0f6bc7",
+    "paper/front-matter.md": "41f93f5485a1fbdddd8db2603c064f2437933fe441339129e5f608399a7acdf8",
+    "paper/build-manifest.json": "df056c0b58f86948fd54605b3da954482e331d9262aa446fc3db0a60fc4de11e"
+  }
+}
