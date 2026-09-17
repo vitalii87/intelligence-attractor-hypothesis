@@ -9,7 +9,7 @@ from tempfile import TemporaryDirectory
 
 from .budgets import BudgetLedger, BudgetLimits
 from .controller import ArenaController
-from .docker_runtime import DockerRuntime
+from .docker_runtime import DockerRuntime, DockerRuntimeError
 from .experiment import ExperimentRunManager
 from .providers import DecisionContext, ProviderTurn, ScriptedProvider, ToolCall
 from .runtime import RuntimeLimits, RuntimeRequest, RuntimeRole
@@ -242,20 +242,21 @@ def main() -> int:
         from .fitness import FitnessPolicy, MetricDirection, MetricSpec
         from .tasks.integer_sum import IntegerSumTask, SEEDS, SOLUTIONS
 
-        if args.trusted_local:
-            runtime = TrustedDemoRuntime(frozenset((*SEEDS.values(), *SOLUTIONS.values())))
-            environment = "trusted-fixtures-only; no container isolation"
-        else:
-            runtime = DockerRuntime(args.image)
-            environment = args.image
         try:
+            if args.trusted_local:
+                runtime = TrustedDemoRuntime(frozenset((*SEEDS.values(), *SOLUTIONS.values())))
+                environment = "trusted-fixtures-only; no container isolation"
+            else:
+                runtime = DockerRuntime(args.image)
+                runtime.check_ready()
+                environment = args.image
             summary = run_task_demo(
                 IntegerSumTask(runtime),
                 {name: (seed, SOLUTIONS[name]) for name, seed in SEEDS.items()},
                 args.output_dir, environment=environment,
                 policy=FitnessPolicy((MetricSpec("correct_fraction", MetricDirection.MAXIMIZE),)),
             )
-        except (OSError, ValueError) as error:
+        except (OSError, ValueError, DockerRuntimeError) as error:
             print(f"task-demo: {error}")
             return 1
         return 0 if summary["success"] else 1

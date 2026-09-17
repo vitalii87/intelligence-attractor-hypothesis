@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from iah_arena.docker_runtime import DockerRuntime, ProcessResult
+from iah_arena.docker_runtime import DockerRuntime, DockerRuntimeError, ProcessResult
 from iah_arena.runtime import Mount, RuntimeLimits, RuntimeRequest, RuntimeRole
 
 
@@ -31,6 +31,56 @@ class DockerRuntimeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             DockerRuntime("ubuntu:latest")
         self.assertEqual(DockerRuntime("sha256:" + "b" * 64).image[:7], "sha256:")
+
+    def test_ready_checks_linux_engine_and_local_image_without_pulling(self) -> None:
+        calls = []
+        def process(argv, timeout):
+            calls.append(tuple(argv))
+            self.assertEqual(timeout, 10.0)
+            return ProcessResult(0, "linux\n", "")
+        DockerRuntime(IMAGE, process_runner=process).check_ready()
+        self.assertEqual(calls, [
+            ("docker", "info", "--format", "{{.OSType}}"),
+            ("docker", "image", "inspect", "--format", "{{.Os}}", IMAGE),
+        ])
+
+    def test_ready_rejects_engine_failure_before_image_check(self) -> None:
+        calls = []
+        def process(argv, timeout):
+            calls.append(argv)
+            return ProcessResult(1, "", "engine unavailable")
+        with self.assertRaisesRegex(DockerRuntimeError, "engine unavailable"):
+            DockerRuntime(IMAGE, process_runner=process).check_ready()
+        self.assertEqual(len(calls), 1)
+
+    def test_ready_rejects_missing_image_and_wrong_container_os(self) -> None:
+        for replies in (
+            [ProcessResult(0, "windows", "")],
+            [ProcessResult(0, "linux", ""), ProcessResult(1, "", "no such image")],
+            [ProcessResult(0, "linux", ""), ProcessResult(0, "windows", "")],
+        ):
+            with self.subTest(replies=replies):
+                with self.assertRaises(DockerRuntimeError):
+                    DockerRuntime(IMAGE, process_runner=lambda argv, timeout: replies.pop(0)).check_ready()
+
+    def test_ready_reports_missing_cli_and_timeout(self) -> None:
+        for error in (FileNotFoundError("docker"), subprocess.TimeoutExpired("docker info", 10)):
+            def process(argv, timeout):
+                raise error
+            with self.subTest(error=error), self.assertRaises(DockerRuntimeError):
+                DockerRuntime(IMAGE, process_runner=process).check_ready()
+
+    def test_launch_failure_is_not_a_candidate_score(self) -> None:
+        for code in (125, 126, 127):
+            runtime = DockerRuntime(IMAGE, process_runner=lambda argv, timeout: ProcessResult(code, "", "launch failure"))
+            with self.subTest(code=code), self.assertRaisesRegex(DockerRuntimeError, "launch failed"):
+                runtime.run(self.workspace, RuntimeRequest(("python3",), RuntimeRole.JUDGE, True), self.limits)
+
+    def test_candidate_failure_remains_an_evaluation_result(self) -> None:
+        runtime = DockerRuntime(IMAGE, process_runner=lambda argv, timeout: ProcessResult(1, "", "bad candidate"))
+        result = runtime.run(self.workspace, RuntimeRequest(("python3",), RuntimeRole.JUDGE, True), self.limits)
+        self.assertEqual(result.exit_code, 1)
+        self.assertFalse(result.succeeded)
 
     def test_judge_command_contains_isolation_and_read_only_mounts(self) -> None:
         fixtures = Path(self.temporary.name) / "fixtures"

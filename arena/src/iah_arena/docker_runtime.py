@@ -62,6 +62,27 @@ class DockerRuntime(CandidateRuntime):
         self.container_user = container_user
         self.process_runner = process_runner
 
+    def check_ready(self) -> None:
+        """Check Linux engine and a locally available pinned image before a run.
+
+        Never pull implicitly here: experiment setup and evaluation are separate.
+        This is a prerequisite check, not a substitute for a container smoke test.
+        """
+        checks = (
+            ((self.docker_binary, "info", "--format", "{{.OSType}}"), "Linux engine"),
+            ((self.docker_binary, "image", "inspect", "--format", "{{.Os}}", self.image), "pinned local image"),
+        )
+        for command, label in checks:
+            try:
+                result = self.process_runner(command, 10.0)
+            except (OSError, subprocess.TimeoutExpired) as error:
+                raise DockerRuntimeError(f"Docker {label} check failed: {error}") from error
+            if result.returncode != 0:
+                detail = (result.stderr or result.stdout).strip()[:2000]
+                raise DockerRuntimeError(f"Docker {label} unavailable: {detail}")
+            if result.stdout.strip() != "linux":
+                raise DockerRuntimeError(f"Docker {label} must use Linux containers")
+
     def run(
         self,
         workspace: Path,
@@ -76,6 +97,11 @@ class DockerRuntime(CandidateRuntime):
         started = time.monotonic()
         try:
             completed = self.process_runner(argv, limits.timeout_seconds)
+            if completed.returncode in {125, 126, 127}:
+                detail = (completed.stderr or completed.stdout).strip()[:2000]
+                raise DockerRuntimeError(
+                    f"Docker launch failed (exit {completed.returncode}): {detail}"
+                )
             elapsed_ms = max(0, round((time.monotonic() - started) * 1000))
             stdout, stderr, truncated = self._bounded_output(
                 completed.stdout,

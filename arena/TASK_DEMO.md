@@ -63,9 +63,23 @@ Limits are one CPU allocation, 128 MiB memory, 32 processes and five seconds per
 case. This still uses scripted providers. It is not Docker-in-Docker; candidates
 never receive Docker control, evaluator source or provider credentials.
 
+Before creating a run, the CLI checks that the engine uses Linux containers and
+the pinned image is already present locally. Each check has a ten-second timeout.
+It does not pull an image automatically. Failed prerequisites produce a readable
+error and no experiment directory. This check does not verify Python availability
+or mounting: a successful live smoke run is still required.
+
+Docker exit codes 125/126/127 are treated conservatively as launch/infrastructure
+errors, not zero-fitness candidates. Normal candidate failures remain evaluation
+results. An explicit candidate exit with a reserved code will also be classified
+as an infrastructure error. See [Docker exit status](https://docs.docker.com/engine/containers/run/#exit-status).
+
 Live Docker execution was not verified during this implementation because the
 local Docker engine was unavailable. Runtime command construction and the task
 boundary are covered by automated tests; that does not replace a container run.
+On 2026-09-17 Docker Desktop was started, but its Linux backend still reported
+missing `docker_engine_linux` and `dockerLifecycleServer` pipes. No image was
+downloaded and no successful container execution is claimed.
 
 ## Outputs
 

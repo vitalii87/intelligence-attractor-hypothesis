@@ -83,6 +83,7 @@ The Python package now provides:
 - a bounded provider tool loop and deterministic fake provider;
 - end-to-end candidate submission and evaluator-controlled acceptance;
 - a Docker runtime boundary for isolated workshop and read-only judge commands;
+- Docker prerequisites checked before task-demo creation; launch errors remain infrastructure failures;
 - a common polyglot image recipe that permits language migration;
 - frozen task/curriculum contracts and explicit benchmark layers;
 - component-preserving Pareto or weighted fitness acceptance;

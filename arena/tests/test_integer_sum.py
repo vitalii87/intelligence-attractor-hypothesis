@@ -1,12 +1,17 @@
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stdout
+from io import StringIO
 from pathlib import Path
+from unittest.mock import patch
 
 from iah_arena.demo import TrustedDemoRuntime, run_task_demo
 from iah_arena.fitness import FitnessPolicy, MetricDirection, MetricSpec
 from iah_arena.runtime import RuntimeResult
 from iah_arena.tasks.integer_sum import IntegerSumTask, SEEDS, SOLUTIONS
+from iah_arena.docker_runtime import DockerRuntimeError
+from iah_arena.__main__ import main
 
 
 class ReplyRuntime:
@@ -20,6 +25,18 @@ class ReplyRuntime:
 
 
 class IntegerSumTests(unittest.TestCase):
+    def test_cli_preflight_failure_creates_no_run(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / "must-not-exist"
+            argv = ["iah_arena", "task-demo", "--image", "sha256:" + "a" * 64, "--output-dir", str(output)]
+            with patch("sys.argv", argv), patch(
+                "iah_arena.__main__.DockerRuntime.check_ready",
+                side_effect=DockerRuntimeError("engine unavailable"),
+            ), redirect_stdout(StringIO()) as console:
+                self.assertEqual(main(), 1)
+            self.assertIn("engine unavailable", console.getvalue())
+            self.assertFalse(output.exists())
+
     def test_exact_oracle_and_candidate_boundary(self):
         runtime = ReplyRuntime(lambda r: RuntimeResult(0, False, 1, str(sum(json.loads(r.argv[-1])))))
         task = IntegerSumTask(runtime)
