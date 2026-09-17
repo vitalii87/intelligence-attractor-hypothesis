@@ -1,3 +1,4 @@
+import hashlib
 import tempfile
 import unittest
 from dataclasses import asdict
@@ -27,7 +28,12 @@ class ArenaControllerAttemptTests(unittest.TestCase):
                             ToolCall(
                                 "write",
                                 "write_file",
-                                {"path": "solver.txt", "content": "improved\n"},
+                                {
+                                    "path": "solver.txt", "content": "improved\n",
+                                    "expected_sha256": hashlib.sha256(
+                                        (seed / "solver.txt").read_bytes()
+                                    ).hexdigest(),
+                                },
                             ),
                         )
                     ),

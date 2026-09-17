@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from dataclasses import asdict
 from pathlib import Path
@@ -36,6 +37,15 @@ def _parser() -> argparse.ArgumentParser:
     )
     dry_run.add_argument("--state-dir", type=Path, required=True)
     dry_run.add_argument("--lineage-id", default="dry-run-001")
+
+    task_demo = subparsers.add_parser(
+        "task-demo", help="run scripted isolated lineages on a real arithmetic task (not an IAH experiment)",
+    )
+    task_demo.add_argument("--task", choices=("integer-sum",), default="integer-sum")
+    task_demo.add_argument("--output-dir", type=Path, required=True)
+    engine = task_demo.add_mutually_exclusive_group(required=True)
+    engine.add_argument("--trusted-local", action="store_true", help="execute only exact bundled fixtures without Docker")
+    engine.add_argument("--image", help="pinned Docker image digest containing python3")
 
     docker_check = subparsers.add_parser(
         "docker-check",
@@ -116,6 +126,7 @@ def _dry_run(controller: ArenaController, lineage_id: str) -> int:
         (seed / "solver.txt").write_text("primitive\n", encoding="utf-8")
         controller.initialize_lineage(lineage_id, origin="scripted-dry-run")
         controller.initialize_workspace(lineage_id, seed)
+        seed_sha256 = hashlib.sha256((seed / "solver.txt").read_bytes()).hexdigest()
 
     provider = ScriptedProvider(
         (
@@ -125,7 +136,10 @@ def _dry_run(controller: ArenaController, lineage_id: str) -> int:
                     ToolCall(
                         "2",
                         "write_file",
-                        {"path": "solver.txt", "content": "improved\n"},
+                        {
+                            "path": "solver.txt", "content": "improved\n",
+                            "expected_sha256": seed_sha256,
+                        },
                     ),
                 )
             ),
@@ -223,6 +237,28 @@ def _docker_check(image: str, docker_binary: str, container_user: str) -> int:
 
 def main() -> int:
     args = _parser().parse_args()
+    if args.command == "task-demo":
+        from .demo import TrustedDemoRuntime, run_task_demo
+        from .fitness import FitnessPolicy, MetricDirection, MetricSpec
+        from .tasks.integer_sum import IntegerSumTask, SEEDS, SOLUTIONS
+
+        if args.trusted_local:
+            runtime = TrustedDemoRuntime(frozenset((*SEEDS.values(), *SOLUTIONS.values())))
+            environment = "trusted-fixtures-only; no container isolation"
+        else:
+            runtime = DockerRuntime(args.image)
+            environment = args.image
+        try:
+            summary = run_task_demo(
+                IntegerSumTask(runtime),
+                {name: (seed, SOLUTIONS[name]) for name, seed in SEEDS.items()},
+                args.output_dir, environment=environment,
+                policy=FitnessPolicy((MetricSpec("correct_fraction", MetricDirection.MAXIMIZE),)),
+            )
+        except (OSError, ValueError) as error:
+            print(f"task-demo: {error}")
+            return 1
+        return 0 if summary["success"] else 1
     if args.command == "docker-check":
         return _docker_check(args.image, args.docker_binary, args.container_user)
 

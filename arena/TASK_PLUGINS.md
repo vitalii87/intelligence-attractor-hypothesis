@@ -2,6 +2,13 @@
 
 The arena core does not define the experimental world. A task plug-in supplies a parameterized task family while conforming to frozen arena-owned contracts.
 
+The first example is [`tasks/integer_sum.py`](src/iah_arena/tasks/integer_sum.py).
+It measures exact arithmetic correctness through an injected runtime, while
+`PolicyEvaluator` controls acceptance. Its seeds and improvements are scripted.
+Only development and selection suites are exercised; the other suite identities
+are reserved. This is not the frozen EXP-001 task. See the [demo guide](TASK_DEMO.md)
+for commands, requirements, expected results and limitations.
+
 ## Required identity
 
 Every plug-in declares:

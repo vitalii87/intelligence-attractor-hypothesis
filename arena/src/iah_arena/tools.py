@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import hashlib
+import os
+import stat
+import tempfile
 from pathlib import Path, PurePosixPath
 from typing import Any, Callable, Mapping
 
@@ -33,38 +36,43 @@ CANONICAL_TOOLS: tuple[ToolDefinition, ...] = (
     ),
     ToolDefinition(
         name="write_file",
-        description="Create or replace one UTF-8 text file in the candidate workspace.",
+        description="Create or replace a UTF-8 file. Supply its latest sha256; null requires a new path.",
         input_schema={
             "type": "object",
             "properties": {
                 "path": {"type": "string"},
                 "content": {"type": "string"},
+                "expected_sha256": {"type": ["string", "null"]},
             },
-            "required": ["path", "content"],
+            "required": ["path", "content", "expected_sha256"],
             "additionalProperties": False,
         },
     ),
     ToolDefinition(
         name="replace_text",
-        description="Replace one exact text occurrence in a UTF-8 workspace file.",
+        description="Replace one exact text occurrence, only if the file matches its latest sha256.",
         input_schema={
             "type": "object",
             "properties": {
                 "path": {"type": "string"},
                 "old": {"type": "string"},
                 "new": {"type": "string"},
+                "expected_sha256": {"type": "string"},
             },
-            "required": ["path", "old", "new"],
+            "required": ["path", "old", "new", "expected_sha256"],
             "additionalProperties": False,
         },
     ),
     ToolDefinition(
         name="delete_file",
-        description="Delete one regular file from the transactional candidate workspace.",
+        description="Delete a regular workspace file only if it matches its latest sha256.",
         input_schema={
             "type": "object",
-            "properties": {"path": {"type": "string"}},
-            "required": ["path"],
+            "properties": {
+                "path": {"type": "string"},
+                "expected_sha256": {"type": "string"},
+            },
+            "required": ["path", "expected_sha256"],
             "additionalProperties": False,
         },
     ),
@@ -162,26 +170,43 @@ class WorkspaceToolExecutor:
         path = self._resolve_file(str(arguments["path"]), must_exist=True)
         if path.stat().st_size > self.max_file_bytes:
             raise ToolExecutionError("file exceeds read limit")
-        content = path.read_text(encoding="utf-8")
+        data = path.read_bytes()
+        content = data.decode("utf-8")
         return {
             "path": path.relative_to(self.workspace).as_posix(),
             "content": content,
-            "sha256": hashlib.sha256(content.encode("utf-8")).hexdigest(),
+            "sha256": hashlib.sha256(data).hexdigest(),
         }
 
     def _tool_write_file(self, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
-        self._require_keys(arguments, {"path", "content"})
+        self._require_keys(arguments, {"path", "content", "expected_sha256"})
         content = str(arguments["content"])
         encoded = content.encode("utf-8")
         if len(encoded) > self.max_file_bytes:
             raise ToolExecutionError("file exceeds write limit")
         path = self._resolve_file(str(arguments["path"]), must_exist=False)
+        self._check_expected_hash(path, arguments["expected_sha256"], allow_missing=True)
+        existing_mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else None
         existing_size = path.stat().st_size if path.exists() else 0
         projected = self._workspace_size() - existing_size + len(encoded)
         if projected > self.max_workspace_bytes:
             raise ToolExecutionError("workspace exceeds size limit")
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(content, encoding="utf-8", newline="\n")
+        # Stage beside the destination so replacement stays on one filesystem.
+        # A failed write must never truncate the agent's current source file.
+        temporary_path: Path | None = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                mode="wb", dir=path.parent, prefix=".iah-write-", delete=False
+            ) as temporary:
+                temporary_path = Path(temporary.name)
+                temporary.write(encoded)
+            if existing_mode is not None:
+                temporary_path.chmod(existing_mode)
+            os.replace(temporary_path, path)
+        finally:
+            if temporary_path is not None:
+                temporary_path.unlink(missing_ok=True)
         self.last_public_tests_passed = False
         return {
             "path": path.relative_to(self.workspace).as_posix(),
@@ -190,26 +215,54 @@ class WorkspaceToolExecutor:
         }
 
     def _tool_replace_text(self, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
-        self._require_keys(arguments, {"path", "old", "new"})
+        self._require_keys(arguments, {"path", "old", "new", "expected_sha256"})
         path = self._resolve_file(str(arguments["path"]), must_exist=True)
+        data = self._check_expected_hash(path, arguments["expected_sha256"])
         old = str(arguments["old"])
         new = str(arguments["new"])
         if not old:
             raise ToolExecutionError("old text must not be empty")
-        content = path.read_text(encoding="utf-8")
+        content = data.decode("utf-8")
         occurrences = content.count(old)
         if occurrences != 1:
             raise ToolExecutionError(f"expected one occurrence, found {occurrences}")
         return self._tool_write_file(
-            {"path": arguments["path"], "content": content.replace(old, new)}
+            {
+                "path": arguments["path"],
+                "content": content.replace(old, new),
+                "expected_sha256": arguments["expected_sha256"],
+            }
         )
 
     def _tool_delete_file(self, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
-        self._require_keys(arguments, {"path"})
+        self._require_keys(arguments, {"path", "expected_sha256"})
         path = self._resolve_file(str(arguments["path"]), must_exist=True)
+        self._check_expected_hash(path, arguments["expected_sha256"])
         path.unlink()
         self.last_public_tests_passed = False
         return {"path": path.relative_to(self.workspace).as_posix(), "deleted": True}
+
+    def _check_expected_hash(
+        self, path: Path, expected: Any, *, allow_missing: bool = False
+    ) -> bytes:
+        if expected is None:
+            if not allow_missing:
+                raise ToolExecutionError("expected_sha256 must be a SHA-256 hex digest")
+            if path.exists() or path.is_symlink():
+                raise ToolExecutionError("file already exists; read_file before editing it")
+            return b""
+        if (
+            not isinstance(expected, str)
+            or len(expected) != 64
+            or any(character not in "0123456789abcdef" for character in expected)
+        ):
+            raise ToolExecutionError("expected_sha256 must be a lowercase SHA-256 hex digest")
+        if not path.is_file():
+            raise ToolExecutionError("file no longer exists; refresh the workspace before editing")
+        data = path.read_bytes()
+        if hashlib.sha256(data).hexdigest() != expected:
+            raise ToolExecutionError("file changed; use read_file and retry with its latest sha256")
+        return data
 
     def _tool_run_public_tests(self, arguments: Mapping[str, Any]) -> Mapping[str, Any]:
         self._require_keys(arguments, set())

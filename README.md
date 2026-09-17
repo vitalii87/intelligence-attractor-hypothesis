@@ -60,7 +60,7 @@ The [theory map](ideas/README.md) explains how these documents relate to the can
 | Canonical theory | Flagship statement established | External conceptual review |
 | Experimental methodology | Drafted | Freeze study-specific metrics and statistical models |
 | EXP-001 | Design draft | Select task and evaluator, then preregister |
-| IAH Arena | Core infrastructure operational | Add task plug-in and provider adapters |
+| IAH Arena | Core infrastructure and runnable three-lineage arithmetic demo | Validate Docker task execution, then connect a real provider |
 | Evidence | None claimed | Run controlled pilot experiments |
 
 ## Attribution
