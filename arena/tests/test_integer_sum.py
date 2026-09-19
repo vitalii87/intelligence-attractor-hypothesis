@@ -60,6 +60,9 @@ class IntegerSumTests(unittest.TestCase):
                 task = IntegerSumTask(ReplyRuntime(lambda r: reply))
                 result = task.make_evaluator(task.curriculum.stages[0])(Path("unused"))
                 self.assertEqual(result["fitness"]["correct_fraction"], 0.0)
+                self.assertEqual(result["timed_out_cases"], result["cases"] if reply.timed_out else 0)
+                self.assertEqual(result["execution_failures"], result["cases"] if not reply.succeeded else 0)
+                self.assertEqual(result["truncated_cases"], result["cases"] if reply.output_truncated else 0)
         task = IntegerSumTask(ReplyRuntime(lambda r: RuntimeResult(0, False, 1, "999")))
         self.assertEqual(task.make_evaluator(task.curriculum.stages[0])(Path("unused"))["fitness"]["correct_fraction"], 0.0)
 
@@ -83,6 +86,8 @@ class IntegerSumTests(unittest.TestCase):
             self.assertEqual(len(summary["lineages"]), 3)
             self.assertEqual(len({row["artifact_id"] for row in summary["lineages"]}), 3)
             for row in summary["lineages"]:
+                self.assertEqual(row["baseline_evaluation"]["execution_failures"], 0)
+                self.assertEqual(row["candidate_evaluation"]["timed_out_cases"], 0)
                 self.assertLess(row["before"]["correct_fraction"], row["after"]["correct_fraction"])
                 self.assertEqual(row["after"]["correct_fraction"], 1.0)
                 workspace = output / "state" / "lineages" / row["lineage"] / "workspace"

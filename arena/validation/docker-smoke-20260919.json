@@ -1,0 +1,305 @@
+{
+  "date": "2026-09-19",
+  "docker_engine": "29.8.0",
+  "platform": "linux/amd64",
+  "runs": [
+    {
+      "run": "sum-docker-20260919",
+      "manifest": {
+        "kind": "scripted-integration-demo",
+        "task": "integer-sum",
+        "task_version": "demo-v1",
+        "evaluator_version": "exact-integer-v1",
+        "curriculum_digest": "67676f0adc0c56d9429eb3fa3f0ae491e5a72836d82975d0ec68b38383ed0019",
+        "environment": "python@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9",
+        "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+        "arena_source_digest": "3bec833c61523b7c3c032558b292e3879adff12690eb025030a9f32256a29f03",
+        "arena_source_hashes": {
+          "__init__.py": "ef51b75095cdda59df047fda1aa59686b22c9ca9549dd0a64a736d573b1c2f0c",
+          "__main__.py": "043903032607304d22fee48a95876cbad5a31d2528ecd5eb2dfd6ccce1c37912",
+          "artifacts.py": "9e22395eee14389a5add19abd0f33916fd5a50bf1c6d6f1dcdd31e490e91ca7a",
+          "budgets.py": "a17a0e46070fe427e1d707fbc198c6741d7b0da76ce5c919ba3575be39acfb85",
+          "controller.py": "c70f40848ea53248fb33b26ac5f1b7f18ef0331450d2b07a4bb48d81ad59ff81",
+          "coordinator.py": "4831673eb87bd5af52b57fe858cb3da9470f57bb7b1624a1f9329e42fc51b057",
+          "demo.py": "4141f36dcb212a9c5765a6070cd5d42415025325e4b9bd1d184b6689eb5ba665",
+          "docker_runtime.py": "c1c269c4fe84df7d5e0515affe3c167b21d65bb657a4e9e92f1ef7428213ec04",
+          "domain.py": "33e8b26cb8648b720efc9f30dafec127b6afbbfcc7b045a7c2970d3c738166f0",
+          "events.py": "2f262448e0d39864dac626b870625ea67eccbfc1cbe55e3088405787665e70e3",
+          "experiment.py": "7dc02b69e3f4aba22060c04ce66ff9cb9e719b28ffa9e5f6153bddb4fa7bab38",
+          "fitness.py": "8f05dd2381a639363ca90ba20973689cf0164702a5087ef3c6bb06cfd4101b9d",
+          "lifecycle.py": "02d59c0fe2b22bd92ca27cc1feb16148d106d450284b58921d63a4fff6c4f281",
+          "locking.py": "ac6d4915688bed75b89fd9c403d9e61d55f5025daa875d27e463069930ca8f4d",
+          "prompts.py": "20dcdbdc14117b849ff12d1ec7ea07794c56fb6d8a89bc61c4a5244f0f914648",
+          "providers.py": "66c7e40ceb0e7bdc772305735c78a607c688c993c58ad5f97f2b203b1ee982f8",
+          "run_config.py": "beae46c318acf4ce932980a789c788302b848c1beaa1df24d555e7aadf228501",
+          "runtime.py": "9dadbba74b6315f4f35f506fdc31d76a3f4de809b528e9c1d411b42e6f5c7aef",
+          "sessions.py": "a071b9392869579dcbfafd36026cfce91167e516add378e3d390b406b42b262e",
+          "tasking.py": "2222b29c5358b5ed8a7431044498eb864eb333177eb34ac821b094bb53dd5fcd",
+          "tasks/__init__.py": "761b5cabd9e8312bf11f5b2b8b20fc24312f64b2672181ec053f1d2b9c6851d0",
+          "tasks/integer_sum.py": "26527373df4aacf7b7993f51a9b5997f49c23a1df539d9bedd69962f45449bf2",
+          "telemetry.py": "0b679132868ae01a0bb5eb52afa01895526ad704657969fbf44671bd3927eb5d",
+          "tools.py": "edd3799ff23756de63d3f618d67d1f487cbdcf4f3037ddb23ad9904c59733603",
+          "workspace.py": "0c8a325f4070b7ff3e851f6f4ece23ebbaf76a8192c65aec21d1933e50f8ec74"
+        },
+        "lineages": {
+          "demo-1": "loop",
+          "demo-2": "recursive",
+          "demo-3": "reduce"
+        },
+        "selection_cases_public": true,
+        "final_holdout_opened": false
+      },
+      "summary": {
+        "kind": "scripted-integration-demo",
+        "task": "integer-sum",
+        "lineages": [
+          {
+            "lineage": "demo-1",
+            "origin": "loop",
+            "before": {
+              "correct_fraction": 0.0
+            },
+            "after": {
+              "correct_fraction": 1.0
+            },
+            "accepted": true,
+            "generation": 1,
+            "artifact_id": "33d26b65d78032727717dc3f05599638e2a4632d2e0c3330cf98d95770eaddd6",
+            "provider_turns": 4,
+            "events": 27
+          },
+          {
+            "lineage": "demo-2",
+            "origin": "recursive",
+            "before": {
+              "correct_fraction": 0.3333333333333333
+            },
+            "after": {
+              "correct_fraction": 1.0
+            },
+            "accepted": true,
+            "generation": 1,
+            "artifact_id": "5823a3a3e65f781257670ae9ac25305e03713f75c44bdf952ad2353665b66bd4",
+            "provider_turns": 4,
+            "events": 27
+          },
+          {
+            "lineage": "demo-3",
+            "origin": "reduce",
+            "before": {
+              "correct_fraction": 0.3333333333333333
+            },
+            "after": {
+              "correct_fraction": 1.0
+            },
+            "accepted": true,
+            "generation": 1,
+            "artifact_id": "9090c4c4646468fd3ec95f5bc56159221053a9294ae39bc93de90bdfc674797e",
+            "provider_turns": 4,
+            "events": 27
+          }
+        ],
+        "failures": [],
+        "success": true,
+        "interpretation": "Infrastructure check only. Predetermined improvements are not evidence for IAH."
+      }
+    },
+    {
+      "run": "sum-docker-20260919-repeat",
+      "manifest": {
+        "kind": "scripted-integration-demo",
+        "task": "integer-sum",
+        "task_version": "demo-v1",
+        "evaluator_version": "exact-integer-v1",
+        "curriculum_digest": "67676f0adc0c56d9429eb3fa3f0ae491e5a72836d82975d0ec68b38383ed0019",
+        "environment": "python@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9",
+        "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+        "arena_source_digest": "5fc058ff13ab0773f1393960566b010e843a7027482d3de6d9293311d497d65e",
+        "arena_source_hashes": {
+          "__init__.py": "ef51b75095cdda59df047fda1aa59686b22c9ca9549dd0a64a736d573b1c2f0c",
+          "__main__.py": "043903032607304d22fee48a95876cbad5a31d2528ecd5eb2dfd6ccce1c37912",
+          "artifacts.py": "9e22395eee14389a5add19abd0f33916fd5a50bf1c6d6f1dcdd31e490e91ca7a",
+          "budgets.py": "a17a0e46070fe427e1d707fbc198c6741d7b0da76ce5c919ba3575be39acfb85",
+          "controller.py": "c70f40848ea53248fb33b26ac5f1b7f18ef0331450d2b07a4bb48d81ad59ff81",
+          "coordinator.py": "4831673eb87bd5af52b57fe858cb3da9470f57bb7b1624a1f9329e42fc51b057",
+          "demo.py": "3bd604be0959adb95411e65d3f5a1a729f464486dd937742e61d56061b4fbac7",
+          "docker_runtime.py": "c1c269c4fe84df7d5e0515affe3c167b21d65bb657a4e9e92f1ef7428213ec04",
+          "domain.py": "33e8b26cb8648b720efc9f30dafec127b6afbbfcc7b045a7c2970d3c738166f0",
+          "events.py": "2f262448e0d39864dac626b870625ea67eccbfc1cbe55e3088405787665e70e3",
+          "experiment.py": "7dc02b69e3f4aba22060c04ce66ff9cb9e719b28ffa9e5f6153bddb4fa7bab38",
+          "fitness.py": "8f05dd2381a639363ca90ba20973689cf0164702a5087ef3c6bb06cfd4101b9d",
+          "lifecycle.py": "02d59c0fe2b22bd92ca27cc1feb16148d106d450284b58921d63a4fff6c4f281",
+          "locking.py": "ac6d4915688bed75b89fd9c403d9e61d55f5025daa875d27e463069930ca8f4d",
+          "prompts.py": "20dcdbdc14117b849ff12d1ec7ea07794c56fb6d8a89bc61c4a5244f0f914648",
+          "providers.py": "66c7e40ceb0e7bdc772305735c78a607c688c993c58ad5f97f2b203b1ee982f8",
+          "run_config.py": "beae46c318acf4ce932980a789c788302b848c1beaa1df24d555e7aadf228501",
+          "runtime.py": "9dadbba74b6315f4f35f506fdc31d76a3f4de809b528e9c1d411b42e6f5c7aef",
+          "sessions.py": "a071b9392869579dcbfafd36026cfce91167e516add378e3d390b406b42b262e",
+          "tasking.py": "2222b29c5358b5ed8a7431044498eb864eb333177eb34ac821b094bb53dd5fcd",
+          "tasks/__init__.py": "761b5cabd9e8312bf11f5b2b8b20fc24312f64b2672181ec053f1d2b9c6851d0",
+          "tasks/integer_sum.py": "31d806b081fe10c9c871e21333e6b194e2c12ac4636f4b9765f64751913f2fe8",
+          "telemetry.py": "0b679132868ae01a0bb5eb52afa01895526ad704657969fbf44671bd3927eb5d",
+          "tools.py": "edd3799ff23756de63d3f618d67d1f487cbdcf4f3037ddb23ad9904c59733603",
+          "workspace.py": "0c8a325f4070b7ff3e851f6f4ece23ebbaf76a8192c65aec21d1933e50f8ec74"
+        },
+        "lineages": {
+          "demo-1": "loop",
+          "demo-2": "recursive",
+          "demo-3": "reduce"
+        },
+        "selection_cases_public": true,
+        "final_holdout_opened": false
+      },
+      "summary": {
+        "kind": "scripted-integration-demo",
+        "task": "integer-sum",
+        "lineages": [
+          {
+            "lineage": "demo-1",
+            "origin": "loop",
+            "before": {
+              "correct_fraction": 0.3333333333333333
+            },
+            "after": {
+              "correct_fraction": 1.0
+            },
+            "accepted": true,
+            "generation": 1,
+            "artifact_id": "4b94214da3c11bd8481d0cf563cadfa650626b368ddff704687407f87b3b3b05",
+            "provider_turns": 4,
+            "events": 27,
+            "baseline_evaluation": {
+              "fitness": {
+                "correct_fraction": 0.3333333333333333
+              },
+              "correct": 2,
+              "cases": 6,
+              "invalid_outputs": 0,
+              "duration_ms": 3172,
+              "timed_out_cases": 0,
+              "execution_failures": 0,
+              "truncated_cases": 0
+            },
+            "candidate_evaluation": {
+              "fitness": {
+                "correct_fraction": 1.0
+              },
+              "correct": 6,
+              "cases": 6,
+              "invalid_outputs": 0,
+              "duration_ms": 3078,
+              "timed_out_cases": 0,
+              "execution_failures": 0,
+              "truncated_cases": 0,
+              "accepted": true,
+              "acceptance": {
+                "mode": "pareto",
+                "reason": "pareto relation: dominates",
+                "pareto_relation": "dominates",
+                "incumbent_score": null,
+                "candidate_score": null
+              }
+            }
+          },
+          {
+            "lineage": "demo-2",
+            "origin": "recursive",
+            "before": {
+              "correct_fraction": 0.3333333333333333
+            },
+            "after": {
+              "correct_fraction": 1.0
+            },
+            "accepted": true,
+            "generation": 1,
+            "artifact_id": "65d0cd5bb351dc5d413b60fc5c794df37364373056f38e4c7e05a8870ffa0753",
+            "provider_turns": 4,
+            "events": 27,
+            "baseline_evaluation": {
+              "fitness": {
+                "correct_fraction": 0.3333333333333333
+              },
+              "correct": 2,
+              "cases": 6,
+              "invalid_outputs": 0,
+              "duration_ms": 3125,
+              "timed_out_cases": 0,
+              "execution_failures": 0,
+              "truncated_cases": 0
+            },
+            "candidate_evaluation": {
+              "fitness": {
+                "correct_fraction": 1.0
+              },
+              "correct": 6,
+              "cases": 6,
+              "invalid_outputs": 0,
+              "duration_ms": 3079,
+              "timed_out_cases": 0,
+              "execution_failures": 0,
+              "truncated_cases": 0,
+              "accepted": true,
+              "acceptance": {
+                "mode": "pareto",
+                "reason": "pareto relation: dominates",
+                "pareto_relation": "dominates",
+                "incumbent_score": null,
+                "candidate_score": null
+              }
+            }
+          },
+          {
+            "lineage": "demo-3",
+            "origin": "reduce",
+            "before": {
+              "correct_fraction": 0.3333333333333333
+            },
+            "after": {
+              "correct_fraction": 1.0
+            },
+            "accepted": true,
+            "generation": 1,
+            "artifact_id": "38159aa2433a88572ebca2ec73825f4108454db0a2040af17314e34bf43d4682",
+            "provider_turns": 4,
+            "events": 27,
+            "baseline_evaluation": {
+              "fitness": {
+                "correct_fraction": 0.3333333333333333
+              },
+              "correct": 2,
+              "cases": 6,
+              "invalid_outputs": 0,
+              "duration_ms": 3750,
+              "timed_out_cases": 0,
+              "execution_failures": 0,
+              "truncated_cases": 0
+            },
+            "candidate_evaluation": {
+              "fitness": {
+                "correct_fraction": 1.0
+              },
+              "correct": 6,
+              "cases": 6,
+              "invalid_outputs": 0,
+              "duration_ms": 3047,
+              "timed_out_cases": 0,
+              "execution_failures": 0,
+              "truncated_cases": 0,
+              "accepted": true,
+              "acceptance": {
+                "mode": "pareto",
+                "reason": "pareto relation: dominates",
+                "pareto_relation": "dominates",
+                "incumbent_score": null,
+                "candidate_score": null
+              }
+            }
+          }
+        ],
+        "failures": [],
+        "success": true,
+        "interpretation": "Infrastructure check only. Predetermined improvements are not evidence for IAH."
+      }
+    }
+  ]
+}

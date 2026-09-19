@@ -80,6 +80,9 @@ class IntegerSumTask:
         correct = 0
         failures = 0
         duration_ms = 0
+        timed_out_cases = 0
+        execution_failures = 0
+        truncated_cases = 0
         for values in cases:
             request = RuntimeRequest(
                 ("python3", "-I", "-B", "solver.py", json.dumps(values)),
@@ -87,6 +90,9 @@ class IntegerSumTask:
             )
             result = self.runtime.run(workspace, request, self.limits)
             duration_ms += result.duration_ms
+            timed_out_cases += int(result.timed_out)
+            execution_failures += int(not result.succeeded)
+            truncated_cases += int(result.output_truncated)
             if not result.succeeded or result.output_truncated:
                 failures += 1
                 continue
@@ -103,4 +109,7 @@ class IntegerSumTask:
             "fitness": {"correct_fraction": correct / len(cases)},
             "correct": correct, "cases": len(cases), "invalid_outputs": failures,
             "duration_ms": duration_ms,
+            "timed_out_cases": timed_out_cases,
+            "execution_failures": execution_failures,
+            "truncated_cases": truncated_cases,
         }

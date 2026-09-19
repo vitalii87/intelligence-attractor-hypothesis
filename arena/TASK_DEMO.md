@@ -74,19 +74,19 @@ errors, not zero-fitness candidates. Normal candidate failures remain evaluation
 results. An explicit candidate exit with a reserved code will also be classified
 as an infrastructure error. See [Docker exit status](https://docs.docker.com/engine/containers/run/#exit-status).
 
-Live Docker execution was not verified during this implementation because the
-local Docker engine was unavailable. Runtime command construction and the task
-boundary are covered by automated tests; that does not replace a container run.
-On 2026-09-17 Docker Desktop was started, but its Linux backend still reported
-missing `docker_engine_linux` and `dockerLifecycleServer` pipes. No image was
-downloaded and no successful container execution is claimed.
+Live Docker execution passed on **2026-09-19**, using Docker Engine 29.8.0 and
+the Linux/amd64 Python image pinned in the [verification record](validation/DOCKER_SMOKE.md).
+All three lineages improved from 2/6 to 6/6 on the repeat, with zero baseline or
+candidate execution failures, timeouts or truncated outputs. The first run's
+anomalous initial score is preserved and discussed in that record. The full
+polyglot image remains unverified; this check covers the arithmetic task only.
 
 ## Outputs
 
 | Path inside the output directory | Purpose |
 | --- | --- |
 | `manifest.json` | Task/evaluator identities, curriculum hash, environment label, source hashes and origins |
-| `summary.json`, `report.html` | Before/after scores, acceptance, failures and interpretation |
+| `summary.json`, `report.html` | Before/after scores, complete baseline/candidate evaluations, timeout/failure counts and interpretation |
 | `state/lineages/` | Separate event journals and original/accepted/rejected program versions |
 | `artifacts/` | Accepted programs addressed by content and provenance |
 | `telemetry/` | Validated events, numeric metrics CSV and export manifest |
@@ -97,7 +97,7 @@ capture the entire host environment. Timings and event timestamps will vary.
 
 ## Next steps
 
-Validate Docker mode, finish budget enforcement and recovery, then connect a
+Validate the full polyglot image, finish budget enforcement and recovery, then connect a
 real provider for an exploratory pilot. A useful scientific task must offer
 measurable constraints and meaningful alternative solutions, with metrics fixed
 before outcomes are inspected. A separate game or numerical task belongs in a

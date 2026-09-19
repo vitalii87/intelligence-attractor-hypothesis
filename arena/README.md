@@ -2,7 +2,7 @@
 
 IAH Arena is a task-independent laboratory for improving candidate programs in separate software lineages. A task plug-in supplies the problem, interface and evaluator; Arena supplies editing tools, execution boundaries, acceptance rules and records. Games, numerical problems and other measurable tasks can use this boundary, but each needs an implemented plug-in.
 
-**Status:** core infrastructure plus a runnable `integer-sum` integration demo. Three scripted providers apply predetermined fixes to three distinct Python implementations. No external model provider is connected yet; no autonomous discovery or empirical support for IAH is claimed. A Docker execution path exists; the trusted local fixture mode also works without Docker.
+**Status:** core infrastructure plus a runnable `integer-sum` integration demo, verified locally and in Docker on 2026-09-19 ([record](validation/DOCKER_SMOKE.md)). Three scripted providers apply predetermined fixes to three distinct Python implementations. No external model provider is connected yet; no autonomous discovery or empirical support for IAH is claimed. The full polyglot image still needs verification.
 
 ## Start here
 
@@ -164,7 +164,7 @@ Generated state and artifacts are ignored by Git.
 
 ## Near-term milestones
 
-1. Validate the task demo in the pinned Docker image on the experiment host; a live container smoke test is still required.
+1. Build and validate the full pinned polyglot image; the Python-only task demo has passed a live Docker smoke test.
 2. Add cumulative action-budget accounting and connect all execution paths to compute accounting.
 3. Persist coordinator state and connect it to curriculum transitions and interruption recovery.
 4. Connect a real provider adapter and run an explicitly exploratory pilot.

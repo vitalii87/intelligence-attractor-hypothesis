@@ -157,6 +157,8 @@ def run_task_demo(
             "generation": result.generation, "artifact_id": result.artifact_id,
             "provider_turns": result.session.provider_turns,
             "events": controller.verify_lineage(lineage),
+            "baseline_evaluation": baseline,
+            "candidate_evaluation": dict(result.evaluation),
         }
         rows.append(row)
         progress(f"{lineage}: accepted={result.accepted}; generation={result.generation}; fitness={row['after']}")
