@@ -10,7 +10,7 @@ from .domain import ArenaEvent, EventType
 from .events import JsonlEventStore
 from .providers import DecisionContext, ProviderAdapter
 from .sessions import DecisionSessionRunner, SessionLimits, SessionOutcome
-from .tools import PublicTestRunner, WorkspaceToolExecutor
+from .tools import EditBudget, PublicTestRunner, WorkspaceToolExecutor
 from .workspace import LineageWorkspaceManager
 
 
@@ -83,6 +83,9 @@ class ArenaController:
         evaluator: Evaluator,
         limits: SessionLimits = SessionLimits(),
         artifact_provenance: ArtifactProvenance | None = None,
+        edit_budget: EditBudget | None = None,
+        max_file_bytes: int = 256_000,
+        max_workspace_bytes: int = 2_000_000,
     ) -> AttemptRunResult:
         manager = self.workspace_manager(lineage_id)
         current_generation = manager.current_generation()
@@ -136,6 +139,9 @@ class ArenaController:
         executor = WorkspaceToolExecutor(
             workspace.files_path,
             public_test_runner=public_test_runner,
+            edit_budget=edit_budget,
+            max_file_bytes=max_file_bytes,
+            max_workspace_bytes=max_workspace_bytes,
         )
         runner = DecisionSessionRunner(
             provider=provider,

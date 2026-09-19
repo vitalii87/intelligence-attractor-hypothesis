@@ -20,7 +20,21 @@ from .telemetry import TelemetryExporter
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="iah-arena")
+    from . import __version__
+    parser.add_argument("--version", action="version", version=f"IAH Arena {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    iterate = subparsers.add_parser("iterate", help="start a configurable exploratory iteration run")
+    iterate.add_argument("--config", type=Path, required=True)
+    iterate.add_argument("--output-dir", type=Path, required=True)
+    iterate.add_argument("--steps", type=int, help="pause after this many additional attempts")
+    resume = subparsers.add_parser("resume-iterations", help="continue using the frozen configuration")
+    resume.add_argument("--run-dir", type=Path, required=True)
+    resume.add_argument("--steps", type=int)
+    iteration_status = subparsers.add_parser("iteration-status", help="show durable iteration state")
+    iteration_status.add_argument("--run-dir", type=Path, required=True)
+    pause_iterations = subparsers.add_parser("pause-iterations", help="request a pause at the next attempt boundary")
+    pause_iterations.add_argument("--run-dir", type=Path, required=True)
 
     init = subparsers.add_parser("init-lineage", help="create an empty lineage event chain")
     init.add_argument("--state-dir", type=Path, required=True)
@@ -237,6 +251,33 @@ def _docker_check(image: str, docker_binary: str, container_user: str) -> int:
 
 def main() -> int:
     args = _parser().parse_args()
+    if args.command in {"iterate", "resume-iterations", "iteration-status", "pause-iterations"}:
+        from .iterations import create_iterations, continue_iterations, read_state, request_pause
+        from .locking import LockUnavailable
+        try:
+            if args.command == "pause-iterations":
+                request_pause(args.run_dir)
+                print("Pause requested at the next attempt boundary.")
+                return 0
+            if args.command == "iteration-status":
+                print(json.dumps(read_state(args.run_dir), indent=2))
+                return 0
+            if args.steps is not None and args.steps <= 0:
+                raise ValueError("steps must be positive")
+            if args.command == "iterate":
+                create_iterations(args.config, args.output_dir)
+                directory = args.output_dir
+            else:
+                directory = args.run_dir
+            state = continue_iterations(directory, steps=args.steps)
+            print(f"iterations: status={state['status']} attempts={len(state['history'])}")
+            return 1 if any(h["status"] in {"failed", "interrupted"} for h in state["history"]) else 0
+        except KeyboardInterrupt:
+            print("Interrupted. Resume retains reserved budgets and the last committed candidate.")
+            return 130
+        except (OSError, ValueError, DockerRuntimeError, LockUnavailable) as error:
+            print(f"iterations: {error}")
+            return 1
     if args.command == "task-demo":
         from .demo import TrustedDemoRuntime, run_task_demo
         from .fitness import FitnessPolicy, MetricDirection, MetricSpec

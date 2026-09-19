@@ -15,6 +15,7 @@ from typing import Callable, Mapping
 from .artifacts import ArtifactProvenance
 from .budgets import BudgetLedger, BudgetLimits
 from .controller import ArenaController
+from .docker_runtime import DockerRuntime
 from .coordinator import SequentialLineageCoordinator, StepStatus
 from .fitness import FitnessPolicy, FitnessVector, PolicyEvaluator
 from .prompts import ImprovementPromptBuilder, InformationBudget
@@ -57,9 +58,12 @@ class TrustedDemoRuntime:
                 cwd=temporary, capture_output=True, encoding="utf-8",
                 timeout=limits.timeout_seconds, check=False,
             )
+        stdout, stderr, truncated = DockerRuntime._bounded_output(
+            completed.stdout, completed.stderr, limits.max_output_bytes,
+        )
         return RuntimeResult(
             completed.returncode, False, round((time.monotonic() - started) * 1000),
-            completed.stdout, completed.stderr,
+            stdout, stderr, output_truncated=truncated,
             runtime_metadata={"engine": "trusted-fixtures-only", "sandboxed": False},
         )
 

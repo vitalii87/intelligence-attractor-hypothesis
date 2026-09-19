@@ -1,5 +1,7 @@
 """Core types for the provider-neutral IAH experimental arena."""
 
+__version__ = "0.2.0"
+
 from .artifacts import ArtifactManifest, ArtifactProvenance, ArtifactStore
 from .budgets import BudgetDelta, BudgetExceeded, BudgetLedger, BudgetLimits, BudgetUsage
 from .coordinator import LineageDisposition, SequentialLineageCoordinator, StepStatus

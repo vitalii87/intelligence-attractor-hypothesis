@@ -4,6 +4,7 @@ import hashlib
 import os
 import stat
 import tempfile
+from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, Callable, Mapping
 
@@ -13,6 +14,22 @@ from .providers import ToolCall, ToolDefinition, ToolResult
 
 class ToolExecutionError(RuntimeError):
     pass
+
+
+@dataclass
+class EditBudget:
+    max_bytes: int
+    max_operations: int
+    bytes_used: int = 0
+    operations_used: int = 0
+
+    def check(self, size: int) -> None:
+        if self.bytes_used + size > self.max_bytes or self.operations_used + 1 > self.max_operations:
+            raise ToolExecutionError("edit budget exhausted")
+
+    def charge(self, size: int) -> None:
+        self.bytes_used += size
+        self.operations_used += 1
 
 
 PublicTestRunner = Callable[[Path], Mapping[str, Any]]
@@ -131,11 +148,13 @@ class WorkspaceToolExecutor:
         public_test_runner: PublicTestRunner,
         max_file_bytes: int = 256_000,
         max_workspace_bytes: int = 2_000_000,
+        edit_budget: EditBudget | None = None,
     ) -> None:
         self.workspace = Path(workspace).resolve()
         self.public_test_runner = public_test_runner
         self.max_file_bytes = max_file_bytes
         self.max_workspace_bytes = max_workspace_bytes
+        self.edit_budget = edit_budget
         self.last_public_tests_passed = False
         self.submitted = False
         self.aborted = False
@@ -191,6 +210,8 @@ class WorkspaceToolExecutor:
         projected = self._workspace_size() - existing_size + len(encoded)
         if projected > self.max_workspace_bytes:
             raise ToolExecutionError("workspace exceeds size limit")
+        if self.edit_budget is not None:
+            self.edit_budget.check(len(encoded))
         path.parent.mkdir(parents=True, exist_ok=True)
         # Stage beside the destination so replacement stays on one filesystem.
         # A failed write must never truncate the agent's current source file.
@@ -208,6 +229,8 @@ class WorkspaceToolExecutor:
             if temporary_path is not None:
                 temporary_path.unlink(missing_ok=True)
         self.last_public_tests_passed = False
+        if self.edit_budget is not None:
+            self.edit_budget.charge(len(encoded))
         return {
             "path": path.relative_to(self.workspace).as_posix(),
             "bytes": len(encoded),
@@ -238,7 +261,12 @@ class WorkspaceToolExecutor:
         self._require_keys(arguments, {"path", "expected_sha256"})
         path = self._resolve_file(str(arguments["path"]), must_exist=True)
         self._check_expected_hash(path, arguments["expected_sha256"])
+        size = path.stat().st_size
+        if self.edit_budget is not None:
+            self.edit_budget.check(size)
         path.unlink()
+        if self.edit_budget is not None:
+            self.edit_budget.charge(size)
         self.last_public_tests_passed = False
         return {"path": path.relative_to(self.workspace).as_posix(), "deleted": True}
 

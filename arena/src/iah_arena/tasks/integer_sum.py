@@ -44,9 +44,12 @@ class IntegerSumTask:
         ) for kind in SuiteKind),
     )
 
-    def __init__(self, runtime: CandidateRuntime) -> None:
+    def __init__(self, runtime: CandidateRuntime, *, limits: RuntimeLimits | None = None,
+                 development=DEVELOPMENT, selection=SELECTION) -> None:
         self.runtime = runtime
-        self.limits = RuntimeLimits(1, 128, 32, 5, tmpfs_mb=16, max_output_bytes=4096)
+        self.limits = limits or RuntimeLimits(1, 128, 32, 5, tmpfs_mb=16, max_output_bytes=4096)
+        self.development = development
+        self.selection = selection
 
     def objective(self, stage: CurriculumStage) -> Mapping[str, Any]:
         self._validate_stage(stage)
@@ -63,14 +66,14 @@ class IntegerSumTask:
         self._validate_stage(stage)
 
         def run(workspace: Path) -> Mapping[str, Any]:
-            result = self._evaluate(workspace, DEVELOPMENT)
+            result = self._evaluate(workspace, self.development)
             return {"passed": result["fitness"]["correct_fraction"] == 1.0, **result}
 
         return run
 
     def make_evaluator(self, stage: CurriculumStage):
         self._validate_stage(stage)
-        return lambda workspace: self._evaluate(workspace, SELECTION)
+        return lambda workspace: self._evaluate(workspace, self.selection)
 
     def _validate_stage(self, stage: CurriculumStage) -> None:
         if stage != self.curriculum.stages[0]:

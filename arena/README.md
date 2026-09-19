@@ -1,5 +1,12 @@
 # IAH Arena
 
+**Software version: 0.2.0.** [Changelog](CHANGELOG.md).
+
+The new [iterative runner](ITERATIONS.md) supports editable budgets/resources,
+rotating lineages, checkpoint recovery and cooperative pause/resume. Start with
+[`iteration.example.toml`](iteration.example.toml); it still uses scripted agents.
+The one-attempt `task-demo` below remains available for installation checks.
+
 IAH Arena is a task-independent laboratory for improving candidate programs in separate software lineages. A task plug-in supplies the problem, interface and evaluator; Arena supplies editing tools, execution boundaries, acceptance rules and records. Games, numerical problems and other measurable tasks can use this boundary, but each needs an implemented plug-in.
 
 **Status:** core infrastructure plus a runnable `integer-sum` integration demo, verified locally and in Docker on 2026-09-19 ([record](validation/DOCKER_SMOKE.md)). Three scripted providers apply predetermined fixes to three distinct Python implementations. No external model provider is connected yet; no autonomous discovery or empirical support for IAH is claimed. The full polyglot image still needs verification.
@@ -40,7 +47,7 @@ Implement [`TaskPlugin`](src/iah_arena/tasking.py) to add a task: stable identit
 
 For IAH, good task scores are insufficient. A scientific run also needs all suite layers, controlled holdout access, repeated origins/seeds, a frontier estimate and prespecified diversity/origin-dependence measurements. Persistent different high-performing solutions are a valid outcome. The demonstration task does not replace the EXP-001 design or preregistration.
 
-No Jenkins service or live GUI is included yet. Jenkins can wrap the CLI, show its console output and archive reports; HTML Publisher can present `report.html`. Cooperative pause/resume and Jenkins integration remain future work. A CI retry must not silently restart an interrupted scientific run.
+No Jenkins service or live GUI is included yet. Jenkins can wrap the CLI, show its console output and archive reports; HTML Publisher can present the demo's `report.html`. The iterative runner supports cooperative pause/resume; Jenkins integration remains future work. A CI retry must not silently restart an interrupted scientific run.
 
 ## Design boundary
 
@@ -165,8 +172,8 @@ Generated state and artifacts are ignored by Git.
 ## Near-term milestones
 
 1. Build and validate the full pinned polyglot image; the Python-only task demo has passed a live Docker smoke test.
-2. Add cumulative action-budget accounting and connect all execution paths to compute accounting.
-3. Persist coordinator state and connect it to curriculum transitions and interruption recovery.
+2. Extend the iterative runner's edit/compute budgets to future provider and task adapters.
+3. Connect its durable scheduling and recovery to curriculum transitions and the scientific run lifecycle.
 4. Connect a real provider adapter and run an explicitly exploratory pilot.
 5. Implement an informative EXP-001 task with all suite layers, freeze metrics and preregister before confirmatory runs.
 6. Add Jenkins launch/report integration and expand observation as real runs require.
