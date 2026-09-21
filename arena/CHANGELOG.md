@@ -1,5 +1,13 @@
 # Arena changelog
 
+## 0.3.1 — 2026-09-21
+
+- Add `check-iterations --config` for read-only local readiness checks.
+- Report aggregate configured monetary limits and full-request capacity per attempt.
+- Check credential presence without disclosure and Docker/image prerequisites
+  without provider calls, image pulls or candidate execution.
+- Distinguish local readiness from unverified live API compatibility.
+
 ## 0.3.0 — 2026-09-21
 
 - Connect an OpenAI Responses adapter to the iterative runner with Docker required.

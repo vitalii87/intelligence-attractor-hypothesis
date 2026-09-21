@@ -19,6 +19,7 @@ $env:PYTHONPATH = "src"
 Copy-Item iteration.example.toml my-iteration.toml
 # Edit my-iteration.toml before starting.
 python -m iah_arena --version
+python -m iah_arena check-iterations --config my-iteration.toml
 python -m iah_arena iterate --config my-iteration.toml --output-dir exports/my-run --steps 2
 python -m iah_arena iteration-status --run-dir exports/my-run
 python -m iah_arena resume-iterations --run-dir exports/my-run

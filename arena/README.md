@@ -1,6 +1,6 @@
 # IAH Arena
 
-**Software version: 0.3.0.** [Changelog](CHANGELOG.md). [OpenAI setup](OPENAI.md).
+**Software version: 0.3.1.** [Changelog](CHANGELOG.md). [OpenAI setup](OPENAI.md).
 
 The new [iterative runner](ITERATIONS.md) supports editable budgets/resources,
 rotating lineages, checkpoint recovery and cooperative pause/resume. Start with

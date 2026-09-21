@@ -60,7 +60,7 @@ The [theory map](ideas/README.md) explains how these documents relate to the can
 | Canonical theory | Flagship statement established | External conceptual review |
 | Experimental methodology | Drafted | Freeze study-specific metrics and statistical models |
 | EXP-001 | Design draft | Select task and evaluator, then preregister |
-| IAH Arena | v0.3.0: iterative runner, budgets, pause/resume and OpenAI adapter tested with simulated API responses | Validate live API pilot, design research task and validate polyglot image |
+| IAH Arena | v0.3.1: iterative runner, local readiness checks, budgets, pause/resume and OpenAI adapter tested with simulated API responses | Validate live API pilot, design research task and validate polyglot image |
 | Evidence | None claimed | Run controlled pilot experiments |
 
 ## Attribution

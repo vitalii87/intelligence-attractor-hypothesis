@@ -31,10 +31,23 @@ calling and the input-token-count endpoint. No model is selected automatically.
 From `arena/`, with `PYTHONPATH=src` and the credential already set:
 
 ```powershell
+python -m iah_arena check-iterations --config my-openai.toml
 python -m iah_arena iterate --config my-openai.toml --output-dir exports/api-pilot --steps 1
 python -m iah_arena iteration-status --run-dir exports/api-pilot
 python -m iah_arena resume-iterations --run-dir exports/api-pilot --steps 1
 ```
+
+`check-iterations` prints a JSON readiness report and exits 0 only if local checks
+pass (otherwise 1). It validates configuration, checks credential presence without
+printing its value, and checks the Linux Docker engine and pinned local image.
+It never calls OpenAI, pulls an image, executes candidate code or creates a run.
+`ready=true` does **not** verify credential validity or model availability.
+
+The report shows per-lineage totals, per-attempt reservations, aggregate configured
+cost across API lineages, and the number of full request reservations fitting one
+attempt. That number is conservative capacity, not a predicted number of turns;
+actual usage can be smaller. Prices are supplied by you and are not verified by
+this command. The JSON can be redirected to a file for a tester or CI job.
 
 Review the first attempt's history, events, usage and candidate before running
 continuously. The same frozen-configuration and checkpoint rules in

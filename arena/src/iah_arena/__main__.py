@@ -23,6 +23,8 @@ def _parser() -> argparse.ArgumentParser:
     from . import __version__
     parser.add_argument("--version", action="version", version=f"IAH Arena {__version__}")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    check = subparsers.add_parser("check-iterations", help="check local prerequisites and budgets without contacting providers")
+    check.add_argument("--config", type=Path, required=True)
 
     iterate = subparsers.add_parser("iterate", help="start a configurable exploratory iteration run")
     iterate.add_argument("--config", type=Path, required=True)
@@ -251,6 +253,11 @@ def _docker_check(image: str, docker_binary: str, container_user: str) -> int:
 
 def main() -> int:
     args = _parser().parse_args()
+    if args.command == "check-iterations":
+        from .preflight import check_iterations
+        report = check_iterations(args.config)
+        print(json.dumps(report, indent=2))
+        return 0 if report["ready"] else 1
     if args.command in {"iterate", "resume-iterations", "iteration-status", "pause-iterations"}:
         from .iterations import create_iterations, continue_iterations, read_state, request_pause
         from .locking import LockUnavailable
