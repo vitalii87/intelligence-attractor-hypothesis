@@ -1,6 +1,6 @@
 # IAH Arena
 
-**Software version: 0.2.0.** [Changelog](CHANGELOG.md).
+**Software version: 0.3.0.** [Changelog](CHANGELOG.md). [OpenAI setup](OPENAI.md).
 
 The new [iterative runner](ITERATIONS.md) supports editable budgets/resources,
 rotating lineages, checkpoint recovery and cooperative pause/resume. Start with
@@ -9,7 +9,7 @@ The one-attempt `task-demo` below remains available for installation checks.
 
 IAH Arena is a task-independent laboratory for improving candidate programs in separate software lineages. A task plug-in supplies the problem, interface and evaluator; Arena supplies editing tools, execution boundaries, acceptance rules and records. Games, numerical problems and other measurable tasks can use this boundary, but each needs an implemented plug-in.
 
-**Status:** core infrastructure plus a runnable `integer-sum` integration demo, verified locally and in Docker on 2026-09-19 ([record](validation/DOCKER_SMOKE.md)). Three scripted providers apply predetermined fixes to three distinct Python implementations. No external model provider is connected yet; no autonomous discovery or empirical support for IAH is claimed. The full polyglot image still needs verification.
+**Status:** core infrastructure plus a runnable `integer-sum` integration demo, verified locally and in Docker on 2026-09-19 ([record](validation/DOCKER_SMOKE.md)). Three scripted providers apply predetermined fixes to three distinct Python implementations. An OpenAI Responses adapter is connected to the iterative runner and tested with simulated API responses; a live paid run remains unverified. No autonomous discovery or empirical support for IAH is claimed. The full polyglot image still needs verification.
 
 ## Start here
 

@@ -1,5 +1,19 @@
 # Arena changelog
 
+## 0.3.0 — 2026-09-21
+
+- Connect an OpenAI Responses adapter to the iterative runner with Docker required.
+- Configure models, token prices, request caps, timeout and credential variable name.
+- Count input before generation; check full request allowance before spending.
+- Record returned usage on success; retain conservative reservations on uncertainty.
+- Keep per-attempt stateless conversations, validate tool-call/result identities,
+  disable retries and redirects, and sanitize transport failures.
+- Add offline adapter and full-iteration API simulation tests and setup instructions.
+
+No paid API request was made during validation; live model compatibility and
+scientific-task validation remain outstanding. The IAH publication stays v0.1.
+Validation: 100 tests run, 99 passed and one optional Docker test skipped.
+
 ## 0.2.0 — 2026-09-19
 
 - Add strict editable `iteration.example.toml` settings for iterative exploration.

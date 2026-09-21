@@ -22,7 +22,7 @@ def validate_config(value: dict) -> dict:
         "workspace": {"max_file_bytes", "max_workspace_bytes"},
         "information": {"max_prompt_chars", "max_history_items", "max_metric_items", "max_workspace_files", "max_workspace_bytes"},
     }
-    _exact_keys(value, required={"schema_version", "lineages", *schemas}, scope="iteration config")
+    _exact_keys(value, required={"schema_version", "lineages", *schemas}, optional={"openai"}, scope="iteration config")
     if type(value["schema_version"]) is not int or value["schema_version"] != 1:
         raise ValueError("unsupported iteration config schema")
     for name, keys in schemas.items():
@@ -83,8 +83,30 @@ def validate_config(value: dict) -> dict:
         seen.add(identifier)
         if lineage["origin"] not in ("loop", "recursive", "reduce"):
             raise ValueError("unknown seed origin")
-        if lineage["model"] != "scripted-v1":
-            raise ValueError("only scripted-v1 is implemented; API adapters are not connected")
+        model = lineage["model"]
+        if not isinstance(model, str) or (model != "scripted-v1" and not re.fullmatch(r"openai/[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}", model)):
+            raise ValueError("model must be scripted-v1 or openai/<model-id>")
+    real = any(item["model"].startswith("openai/") for item in lineages)
+    if real and ("openai" not in value or runtime["engine"] != "docker"):
+        raise ValueError("OpenAI lineages require [openai] settings and Docker")
+    if "openai" in value:
+        settings = value["openai"]
+        keys = {"key_env", "timeout_seconds", "max_input_tokens", "max_output_tokens",
+                "input_microusd_per_million", "output_microusd_per_million"}
+        if not isinstance(settings, dict):
+            raise ValueError("openai must be a table")
+        _exact_keys(settings, required=keys, scope="openai")
+        if not isinstance(settings["key_env"], str) or not re.fullmatch(r"[A-Z][A-Z0-9_]*", settings["key_env"]):
+            raise ValueError("key_env must be an environment variable name")
+        for key in keys - {"key_env"}:
+            if type(settings[key]) is not int or settings[key] <= 0:
+                raise ValueError(f"openai.{key} must be a positive integer")
+        cost = (settings["max_input_tokens"] * settings["input_microusd_per_million"] +
+                settings["max_output_tokens"] * settings["output_microusd_per_million"] + 999_999) // 1_000_000
+        if real and (value["attempt"]["input_tokens"] < settings["max_input_tokens"] or
+                     value["attempt"]["output_tokens"] < settings["max_output_tokens"] or
+                     value["attempt"]["cost_microusd"] < cost):
+            raise ValueError("attempt budget must fit at least one full OpenAI request")
     return value
 
 

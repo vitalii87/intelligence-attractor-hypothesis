@@ -1,8 +1,9 @@
-# Iterative runs — Arena 0.2.0
+# Iterative runs — Arena 0.3.0
 
 This is the configurable **exploratory runner**. It supports repeated attempts,
-budgets, stopping and checkpoint recovery. Only `integer-sum` and `scripted-v1`
-providers are currently connected. There are no paid API calls. This is not the
+budgets, stopping and checkpoint recovery. `integer-sum` supports `scripted-v1`
+and an OpenAI adapter; see [OPENAI.md](OPENAI.md) for paid API configuration.
+The default example makes no paid calls. This is not the
 preregistered EXP-001 runner and does not open a final holdout.
 
 ## Configure and run
@@ -54,11 +55,10 @@ budgets. Unknown keys, invalid types, unknown models and tasks are rejected.
 | `task` | Task ID, strict improvement threshold, development and selection examples |
 | `lineages` | Any positive number of unique IDs, starting structures and implemented model IDs |
 
-`model = "scripted-v1"` is presently the only implemented provider. Zero token and
-monetary budgets in the example are correct for it. Real API adapters and their
-usage accounting must be implemented and tested before adding real model IDs.
+`model = "scripted-v1"` uses zero token and monetary budgets in the default example.
+`openai/<model-id>` requires Docker, nonzero budgets and an `[openai]` table.
 API keys are not a supported configuration field and must not be placed in files
-or histories. Future adapters should obtain credentials separately.
+or histories. The OpenAI adapter reads a named environment variable separately.
 
 Each configured epoch gives every active lineage one opportunity; order rotates
 between epochs. Seeds may share an origin but IDs must differ. One accepted
@@ -151,5 +151,5 @@ attempts; code 130 reports Ctrl+C. Resuming does not erase prior errors.
 
 `iteration.example.toml` is distinct from the existing `run.example.toml`, which
 freezes the scientific experiment manifest and holdout lifecycle. Integration of
-this runner with that lifecycle, real providers and a scientifically useful task
+this runner with that lifecycle and a scientifically useful task
 remains necessary before confirmatory experiments.

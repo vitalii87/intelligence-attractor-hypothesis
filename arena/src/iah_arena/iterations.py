@@ -19,6 +19,7 @@ from .fitness import AcceptanceMode, FitnessPolicy, FitnessVector, MetricDirecti
 from .iteration_config import BUDGET_FIELDS, load_config
 from .locking import FileLock
 from .providers import DecisionContext, ProviderTurn, ScriptedProvider, ToolCall
+from .openai_provider import OpenAIProvider, OpenAITransport
 from .prompts import ImprovementPromptBuilder, InformationBudget
 from .runtime import RuntimeLimits
 from .sessions import SessionLimits
@@ -88,10 +89,17 @@ def _runtime(config):
     return TrustedDemoRuntime(frozenset((*SEEDS.values(), *SOLUTIONS.values())))
 
 
+def _provider_prerequisites(config):
+    if any(item["model"].startswith("openai/") for item in config["lineages"]):
+        settings = config["openai"]
+        OpenAITransport(settings["key_env"], settings["timeout_seconds"])
+
+
 def create_iterations(config_path: Path, directory: Path) -> dict:
     config_path, directory = Path(config_path), Path(directory)
     raw = config_path.read_bytes()
     config = load_config(config_path)
+    _provider_prerequisites(config)
     _runtime(config)  # Prerequisites before creating any run files.
     directory.mkdir(parents=True, exist_ok=False)
     (directory / "config.toml").write_bytes(raw)
@@ -153,6 +161,8 @@ def _perform(config, directory, state, item, job, runtime, ledgers):
             "risks": ["scripted demonstration, no autonomous discovery"],
         }}),)),
     ))
+    if item["model"].startswith("openai/"):
+        provider = OpenAIProvider(item["model"].removeprefix("openai/"), config["openai"], api)
     context = DecisionContext(lineage, 1, 0, 1, task.objective(stage), baseline["fitness"],
                               asdict(api.remaining()), {"files": ["solver.py"], "total_bytes": len(source)})
     history = [h for h in state["history"] if h["lineage"] == lineage]
@@ -202,6 +212,7 @@ def continue_iterations(directory: Path, *, steps: int | None = None, progress=p
         config = load_config(directory / "config.toml")
         if state["status"] == "complete":
             return state
+        _provider_prerequisites(config)
         if state["inflight"] is not None:
             lost = state["inflight"]
             row = state["lineages"][lost["lineage"]]
