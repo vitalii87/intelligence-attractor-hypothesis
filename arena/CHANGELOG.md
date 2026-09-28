@@ -1,5 +1,16 @@
 # Arena changelog
 
+## 0.4.0 — 2026-09-28
+
+- Add an exploratory directed weighted-routing task kernel: reproducible instance
+  generation, canonical instance hashes, exact optimum and path validation.
+- Preserve equally optimal routes; include a diamond degeneracy control.
+- Cross-check the oracle with exhaustive enumeration on small generated graphs.
+- Document the task's limitations and steps before experimental use.
+
+This kernel is not yet connected to the iterative runner and does not change
+EXP-001's unregistered task choice. No live API runs or scientific results claimed.
+
 ## 0.3.1 — 2026-09-21
 
 - Add `check-iterations --config` for read-only local readiness checks.
