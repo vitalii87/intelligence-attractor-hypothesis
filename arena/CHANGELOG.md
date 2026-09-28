@@ -1,5 +1,15 @@
 # Arena changelog
 
+## 0.4.1 — 2026-09-28
+
+- Add a mutable agent-package manifest and entry reload on each launch.
+- Supply a neutral, external read-only environment passport with actual capabilities.
+- Inspect package hashes and structural validity before/after writable execution.
+- Test entry changes, persistence, bounded packages and broken self-edits.
+
+Prototype only: no integration with iterate, model gateway, rate scheduler or
+automatic promotion. Docker smoke blocked by stopped local Linux engine.
+
 ## 0.4.0 — 2026-09-28
 
 - Add an exploratory directed weighted-routing task kernel: reproducible instance

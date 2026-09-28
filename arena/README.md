@@ -1,6 +1,9 @@
 # IAH Arena
 
-**Software version: 0.4.0.** [Changelog](CHANGELOG.md). [OpenAI setup](OPENAI.md).
+**Software version: 0.4.1.** [Changelog](CHANGELOG.md). [OpenAI setup](OPENAI.md).
+
+[Mutable agent package prototype](AGENT_PACKAGE.md): entry manifest and neutral
+environment passport; not yet integrated with the iterative runner.
 
 [Weighted-routing task prototype](ROUTING_TASK.md): generator and exact evaluator
 with equal-optimum controls; not yet connected to the iterative runner.
