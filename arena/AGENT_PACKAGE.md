@@ -1,8 +1,9 @@
-# Mutable agent package prototype — 0.4.1
+# Mutable agent package prototype — 0.4.2
 
 This is the first package-contract layer, not a completed recursive optimizer.
 The existing `iterate` command is unchanged. No model gateway, cumulative token
-cap, iteration-rate scheduler or automatic package promotion is connected yet.
+cap or iteration-rate scheduler is connected yet. External-evaluator promotion
+is available through the controller API described below.
 
 A working copy contains `agent.json` with exactly:
 
@@ -40,7 +41,37 @@ files, external read-only context and invalid self-edits. A real Docker smoke
 attempt was blocked because the local Linux Docker engine was not running;
 actual container execution of this prototype remains unverified.
 
-Next: connect the package to disposable attempt snapshots and bounded model-call
-requests. Then enforce input/output/combined tokens per iteration and a durable
+Disposable attempt snapshots are connected as described below. Next: add bounded
+model-call requests. Then enforce input/output/combined tokens per iteration and a durable
 iteration-rate limit. Only after that should this replace the current externally
 directed editing loop. The API model's weights remain outside the mutable package.
+
+## Isolated attempts (0.4.2)
+
+`PackageAttempts(state_dir, lineage_id)` now connects the launcher to the existing
+generation store. Call `initialize(seed)` once, then `run(epoch=..., attempt=...,
+runtime=..., limits=..., task_text=..., evaluator=...)`. This is a controller Python
+API; it is not connected to `iterate` or a new CLI command yet.
+
+Each call copies the accepted package into a disposable workspace. Only that
+workspace and the read-only passport are mounted into the candidate container.
+An unsuccessful runtime or invalid package is rejected without calling the
+evaluator. Otherwise a trusted external evaluator must return a dictionary with
+boolean `accepted` and string `reason`. Package mutation by the evaluator is
+detected and rejected. This decision contract does not define scientific fitness;
+the real task evaluator still needs integration.
+
+Accepted versions retain their prior generations. Rejected work, runtime reports,
+the supplied task/passport and decisions remain available for inspection. Hashes
+detect changes to accepted files before launching, and a per-lineage lock prevents
+concurrent advances. A crash during candidate execution leaves an unpromoted
+attempt; restart with a new attempt number after ensuring no old container remains.
+There is no automatic recovery/promotion of interrupted work. Promotion uses the
+existing workspace store: a crash during its multi-file commit may require manual
+reconciliation; this is not yet a crash-transactional production runner.
+
+Tests verify preservation of accepted files, rejection archives, changed entry on
+the next accepted generation, interruption, and evaluator mutation. They use a
+simulated runtime and do not replace the outstanding real Docker smoke test.
+The model gateway, live disk quota, cumulative budgets and period-based scheduler
+remain unfinished. This API is for controlled development tests at this stage.

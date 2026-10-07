@@ -1,5 +1,16 @@
 # Arena changelog
 
+## 0.4.2 — 2026-10-07
+
+- Connect mutable packages to isolated attempt copies and accepted generations.
+- Require a trusted external evaluation decision for promotion.
+- Retain rejected work, execution reports, passports and decisions.
+- Check accepted-package integrity and reject evaluator-side package mutations.
+- Test accepted entry reload, rejection, interruption and external tampering.
+
+Controller API only, not yet connected to iterate. Model gateway, cumulative
+package budgets and iteration-rate scheduling remain unfinished.
+
 ## 0.4.1 — 2026-09-28
 
 - Add a mutable agent-package manifest and entry reload on each launch.
