@@ -1,6 +1,10 @@
 # IAH Arena
 
-**Software version: 0.4.2.** [Changelog](CHANGELOG.md). [OpenAI setup](OPENAI.md).
+**Software version: 0.5.0.** [Changelog](CHANGELOG.md). [OpenAI setup](OPENAI.md).
+
+[Package model gateway and iteration controls](MODEL_GATEWAY.md): package-authored
+prompts, shared token limits and persistent launch-rate limits, tested with simulated
+backends. Controller API only; paid bridge and CLI wiring remain unfinished.
 
 [Mutable agent package prototype](AGENT_PACKAGE.md): entry manifest and neutral
 environment passport; not yet integrated with the iterative runner.

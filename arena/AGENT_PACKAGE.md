@@ -1,3 +1,5 @@
+> Update 0.5.0: see [MODEL_GATEWAY.md](MODEL_GATEWAY.md) for the now-connected provider-neutral gateway and optional iteration-rate limits. The sections below describe the earlier launcher and snapshot layers. Paid API and CLI integration remain unfinished.
+
 # Mutable agent package prototype — 0.4.2
 
 This is the first package-contract layer, not a completed recursive optimizer.

@@ -36,7 +36,7 @@ def inspect_package(directory: Path) -> dict:
     return {"argv": argv, "files": files, "bytes": total, "sha256": digest}
 
 
-def run_package(directory, runtime, limits, task_text: str):
+def run_package(directory, runtime, limits, task_text: str, *, model_context=None):
     """Run a disposable WORKING COPY. No automatic promotion or host execution."""
     if not isinstance(task_text, str) or not task_text.strip() or len(task_text) > 30000:
         raise ValueError("bounded author task text required")
@@ -56,6 +56,10 @@ def run_package(directory, runtime, limits, task_text: str):
         "persistence": "Files in this working copy survive launches; temporary container storage does not. Promotion is external.",
         "accounting": "This prototype does not enforce cumulative token budgets or iteration scheduling; model calls are unavailable.",
     }
+    if model_context is not None:
+        passport["capabilities"]["model_gateway"] = True
+        passport["model_gateway"] = model_context
+        passport["accounting"] = "All model requests share the declared iteration budget. Return one JSON action on stdout to yield control."
     with tempfile.TemporaryDirectory(prefix="iah-context-") as temporary:
         context_dir = Path(temporary)
         (context_dir / "context.json").write_text(json.dumps(passport), encoding="utf-8")

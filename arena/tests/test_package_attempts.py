@@ -76,3 +76,13 @@ class PackageAttemptTests(unittest.TestCase):
         (self.original / "first.py").write_text("changed")
         with self.assertRaisesRegex(ValueError, "outside controller"):
             self.run_attempt(1)
+
+    def test_rate_limit_cannot_be_bypassed_by_omitting_setting(self):
+        from iah_arena.iteration_rate import IterationRate, IterationRateLimited
+        args = dict(epoch=1, runtime=EditingRuntime(), limits=RuntimeLimits(1, 128, 32, 5),
+                    task_text="Task", evaluator=lambda _: {"accepted": False, "reason": "test"})
+        self.controller.run(attempt=1, rate=IterationRate(1, 3600), **args)
+        with self.assertRaises(IterationRateLimited):
+            self.controller.run(attempt=2, rate=IterationRate(1, 3600), **args)
+        with self.assertRaises(ValueError):
+            self.controller.run(attempt=2, **args)

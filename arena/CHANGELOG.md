@@ -1,5 +1,19 @@
 # Arena changelog
 
+## 0.5.0 — 2026-10-12
+
+- Add a durable provider-neutral gateway for package-authored prompts.
+- Enforce per-iteration input, output, combined-token and call limits.
+- Deduplicate completed requests and retain reservations after uncertain failures.
+- Connect cooperative package yield/resume to isolated attempts and external evaluation.
+- Add durable per-lineage rolling-window iteration limits without catch-up.
+- Retry transient Windows directory access failures during atomic promotion/archive.
+
+Validation: 129 tests run, 128 passed, one optional Docker test skipped.
+
+Simulated backend/runtime validation only. Paid API bridge, monetary integration
+and CLI/config wiring remain unfinished; the existing iterate command is unchanged.
+
 ## 0.4.2 — 2026-10-07
 
 - Connect mutable packages to isolated attempt copies and accepted generations.

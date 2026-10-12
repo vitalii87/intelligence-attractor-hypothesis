@@ -18,7 +18,8 @@ class PackageAttempts:
             _write_json_atomic(current.parent / "package.json", inspect_package(current))
             return current
 
-    def run(self, *, epoch: int, attempt: int, runtime, limits, task_text: str, evaluator):
+    def run(self, *, epoch: int, attempt: int, runtime, limits, task_text: str, evaluator,
+            gateway_limits=None, backend=None, backend_id=None, max_launches=16, rate=None):
         """Evaluator is trusted controller code, never a candidate-supplied command.
 
         It receives the completed working copy and must return a dict containing
@@ -33,13 +34,30 @@ class PackageAttempts:
             expected = json.loads((current.parent / "package.json").read_text())["sha256"]
             if before["sha256"] != expected:
                 raise ValueError("accepted package changed outside controller")
+            if rate is not None:
+                from .iteration_rate import reserve_iteration
+                reserve_iteration(self.manager.root / "rate.json", rate)
+            elif (self.manager.root / "rate.json").exists():
+                raise ValueError("cannot remove established iteration rate")
             workspace = self.manager.begin_attempt(epoch=epoch, attempt=attempt)
             # Record intent before executing; interrupted work is never auto-promoted.
             _write_json_atomic(workspace.path / "package-run.json", {
                 "status": "started", "parent_sha256": before["sha256"], "task_text": task_text,
             })
             try:
-                report = run_package(workspace.files_path, runtime, limits, task_text)
+                if gateway_limits is None:
+                    if backend is not None or backend_id is not None:
+                        raise ValueError("gateway limits required with backend")
+                    report = run_package(workspace.files_path, runtime, limits, task_text)
+                else:
+                    from .model_gateway import ModelGateway
+                    from .package_dialogue import run_dialogue
+                    if backend is None:
+                        raise ValueError("trusted model backend required")
+                    gateway = ModelGateway(workspace.path / "gateway.json", gateway_limits,
+                                           backend, backend_id=backend_id)
+                    report = run_dialogue(workspace.files_path, runtime, limits, task_text,
+                                          gateway, max_launches=max_launches)
                 _write_json_atomic(workspace.path / "package-run.json", {"status": "executed", **report})
                 outcome = report["runtime"]
                 if not report["package_valid"] or outcome["exit_code"] != 0 or outcome["timed_out"] or outcome["output_truncated"]:

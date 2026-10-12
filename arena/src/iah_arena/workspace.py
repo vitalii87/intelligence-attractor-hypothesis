@@ -4,6 +4,7 @@ import json
 import os
 import re
 import shutil
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -12,6 +13,19 @@ from .lifecycle import AttemptLifecycle, AttemptStatus
 
 
 _SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+
+
+def _move_directory(source: Path, target: Path) -> None:
+    # Windows scanners can briefly hold a newly written candidate directory.
+    # Retry only access failures, never delete or fall back to partial copying.
+    for attempt in range(5):
+        try:
+            os.replace(source, target)
+            return
+        except PermissionError:
+            if os.name != "nt" or attempt == 4:
+                raise
+            time.sleep(0.05 * 2**attempt)
 
 
 class WorkspaceError(RuntimeError):
@@ -119,7 +133,7 @@ class LineageWorkspaceManager:
             raise FileExistsError(f"accepted generation already exists: {next_generation}")
         self._write_lifecycle(workspace.path, lifecycle)
         target.parent.mkdir(parents=True, exist_ok=True)
-        os.replace(workspace.path, target)
+        _move_directory(workspace.path, target)
         _write_json_atomic(
             target / "generation.json",
             {
@@ -153,7 +167,7 @@ class LineageWorkspaceManager:
         target.parent.mkdir(parents=True, exist_ok=True)
         if target.exists():
             raise FileExistsError(f"archived attempt already exists: {target.name}")
-        os.replace(workspace.path, target)
+        _move_directory(workspace.path, target)
         return AttemptWorkspace(target, target / "files", lifecycle)
 
     def _transition(
