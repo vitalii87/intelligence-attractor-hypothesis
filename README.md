@@ -7,7 +7,7 @@ The Intelligence Attractor Hypothesis (IAH) proposes that independently formed i
 ## Read the Flagship Theory
 
 Research tooling: [IAH Arena](arena/README.md) runs experiments;
-[PRISM](prism/README.md) is an independent analysis-module scaffold.
+[PRISM](prism/README.md) provides independent analysis contracts and verified artifact import.
 See [PRISM requirements](prism/REQUIREMENTS.md) for its measurement and comparison contracts.
 
 ### [The Intelligence Attractor Hypothesis — Canonical Statement](ideas/intelligence-attractor-hypothesis.md)

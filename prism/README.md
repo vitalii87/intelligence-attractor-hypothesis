@@ -1,6 +1,6 @@
 # PRISM
 
-**Version 0.1.0 — contract scaffold, not a finished analyzer.** PRISM is a working
+**Version 0.2.0 — verified artifact import and contract scaffold.** PRISM is a working
 name; name/package availability has not been checked. Distribution: `iah-prism`;
 Python import: `prism`. Uses Python 3.11+, standard library only at runtime.
 
@@ -15,12 +15,14 @@ convergence, divergence, persistent differences and insufficient evidence equall
 - Basic context compatibility checks, including environment identity for resources.
 - Adapter and pair-metric extension protocols.
 - Deterministic JSON report serialization and contract tests.
+- Read-only Arena ArtifactStore importer, evidence verification and dataset manifest.
+- `python -m prism import-arena` CLI; see [import instructions](IMPORTING.md).
 
-No actual Arena importer, behavioral/architectural metric, statistical inference,
-CLI or visualization is implemented yet. Hash references are validated syntactically,
-not checked against files. The compatibility helper is a prerequisite check, not
-proof of a fair experimental comparison. Report records are an initial schema;
-full provenance and experiment manifests remain work described in REQUIREMENTS.md.
+No behavioral/architectural metric, statistical inference or visualization is
+implemented yet. The importer verifies evidence hashes, but record constructors
+alone only validate hash syntax. The compatibility helper is a prerequisite check,
+not proof of a fair experimental comparison. Full run/observation import and
+experiment manifests remain work described in REQUIREMENTS.md.
 
 ## Layout
 

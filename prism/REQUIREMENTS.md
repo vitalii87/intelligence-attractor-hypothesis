@@ -1,3 +1,5 @@
+> Implementation update 0.2.0: Arena ArtifactStore snapshot import, evidence digest verification, parsing limits and dataset manifests are now implemented. Full observation/run alignment and scientific metrics remain planned. See IMPORTING.md.
+
 # PRISM requirements
 
 Status: design baseline, 2026-10-27. Version 0.1.0 implements only the contract
