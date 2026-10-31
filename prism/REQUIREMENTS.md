@@ -1,4 +1,4 @@
-> Implementation update 0.2.0: Arena ArtifactStore snapshot import, evidence digest verification, parsing limits and dataset manifests are now implemented. Full observation/run alignment and scientific metrics remain planned. See IMPORTING.md.
+> Implementation update 0.3.0: Exact behavioral disagreement, explicit case/replicate alignment and coverage reporting are implemented for caller-supplied observations. Arena ArtifactStore snapshot import, evidence digest verification, parsing limits and dataset manifests are now implemented. Full run ingestion and other metrics remain planned. See IMPORTING.md.
 
 # PRISM requirements
 
@@ -25,7 +25,7 @@ not assumptions embedded in all measurements.
   as independent replicates. Minimal entity/version scaffold is implemented.
 - **R02 Evidence:** reference input artifacts by location and content digest;
   verify digests on import. Record adapter/schema version and transformations.
-  Never execute imported code. Reference records exist; verification/import do not.
+  Never execute imported code. ArtifactStore import verifies evidence; standalone reference records only validate syntax.
 - **R03 Conditions:** record task, suite/case IDs, evaluator, protocol, environment,
   budgets and timestamps. Comparisons must expose missing/different conditions.
   Basic context checks are implemented; full experiment manifests are not.
@@ -113,5 +113,6 @@ Graph extraction must state language support and unresolved dynamic dependencies
 7. Demonstrate a known convergence fixture, divergence fixture and persistent-
    difference fixture without using their labels as inputs to the measurements.
 
-Only basic contract tests exist today. A useful initial analyzer additionally needs
-an importer, real measurements, provenance assembly and end-to-end fixtures.
+Contract, ArtifactStore import and behavioral measurement tests are present. A full
+run analyzer still needs observation ingestion, provenance assembly and end-to-end
+fixtures spanning runner evidence through comparison reports.

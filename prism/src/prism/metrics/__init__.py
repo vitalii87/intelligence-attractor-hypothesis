@@ -1,4 +1,4 @@
-"""Metric extension contracts. Concrete scientific metrics are not implemented yet."""
+"""Metric extension contracts. Exact behavioral measurement is available in behavior.py."""
 from typing import Protocol
 from ..models import EntityVersion, EvaluationContext, Measurement
 

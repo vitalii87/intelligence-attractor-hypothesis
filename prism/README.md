@@ -1,11 +1,11 @@
 # PRISM
 
-**Version 0.2.0 — verified artifact import and contract scaffold.** PRISM is a working
+**Version 0.3.0 — first behavioral measurement and verified artifact import.** PRISM is a working
 name; name/package availability has not been checked. Distribution: `iah-prism`;
 Python import: `prism`. Uses Python 3.11+, standard library only at runtime.
 
-Independent offline measurement and comparison of versioned systems. Arena is a
-future data source, not a runtime dependency. PRISM must be able to report
+Independent offline measurement and comparison of versioned systems. Arena ArtifactStore is a supported
+data source, not a runtime dependency. PRISM must be able to report
 convergence, divergence, persistent differences and insufficient evidence equally.
 
 ## Present in this scaffold
@@ -18,8 +18,9 @@ convergence, divergence, persistent differences and insufficient evidence equall
 - Read-only Arena ArtifactStore importer, evidence verification and dataset manifest.
 - `python -m prism import-arena` CLI; see [import instructions](IMPORTING.md).
 
-No behavioral/architectural metric, statistical inference or visualization is
-implemented yet. The importer verifies evidence hashes, but record constructors
+Exact output disagreement with explicit case/replicate alignment and coverage is
+implemented as a Python API; see [behavior measurements](BEHAVIOR.md). Architectural
+metrics, statistical inference and visualization are not implemented yet. The importer verifies evidence hashes, but record constructors
 alone only validate hash syntax. The compatibility helper is a prerequisite check,
 not proof of a fair experimental comparison. Full run/observation import and
 experiment manifests remain work described in REQUIREMENTS.md.
