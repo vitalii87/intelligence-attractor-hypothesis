@@ -4,10 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "iah-prism"
-version = "0.3.0"
+version = "0.4.0"
 description = "Independent measurement and comparison contracts for agent analysis"
 requires-python = ">=3.11"
 dependencies = []
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+prism = ["web/*.html", "web/*.css", "web/*.js"]

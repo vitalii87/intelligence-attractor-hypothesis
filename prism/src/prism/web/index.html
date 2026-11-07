@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="uk" data-theme="light">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>PRISM · Дослідження агентів</title><link rel="stylesheet" href="/style.css"><script defer src="/app.js"></script></head>
+<body>
+<a class="skip-link" href="#main-content">Перейти до вмісту</a>
+<button id="nav-overlay" class="nav-overlay" aria-label="Закрити меню" hidden></button>
+<aside class="sidebar" id="sidebar" aria-label="Навігація Prism">
+  <div class="brand"><span class="prism-mark" aria-hidden="true">◈</span><span>PRISM<small>EXPERIMENT WORKSPACE</small></span><button id="close-menu" class="icon-button" aria-label="Закрити навігацію">×</button></div>
+  <div class="workspace-label">Дослідження агентів<span class="local-label">LOCAL</span></div>
+  <div class="side-label">ПОТОЧНИЙ ЗАПУСК <span id="run-count">—</span></div>
+  <label class="run-search"><span aria-hidden="true">⌕</span><input id="run-search" type="search" aria-label="Пошук запусків" placeholder="Знайти запуск…"></label>
+  <nav id="runs" aria-label="Запуски"></nav>
+  <div class="side-label">ДОСЛІДЖЕННЯ</div>
+  <nav class="section-nav" aria-label="Розділи">
+    <button data-tab="overview" class="active" aria-current="page"><span aria-hidden="true">▦</span><span>Огляд</span></button>
+    <button data-tab="attempts"><span aria-hidden="true">≡</span><span>Спроби</span><small id="attempt-count">—</small></button>
+    <button data-tab="events"><span aria-hidden="true">⌁</span><span>Журнал подій</span><small id="event-count">—</small></button>
+    <button data-tab="versions"><span class="code-icon" aria-hidden="true">{ }</span><span>Версії коду</span><small id="version-count">—</small></button>
+    <button data-tab="evidence"><span aria-hidden="true">◇</span><span>Контекст і докази</span></button>
+  </nav>
+  <div class="sidebar-bottom"><div><span class="live-dot"></span> Локальний простір</div><p>Спостереження за запуском.<br>Оригінальні дані лише для читання.</p><div class="sidebar-footer"><span id="prism-version">PRISM</span><button id="help" title="Клавіші й навігація" aria-label="Довідка з навігації">?</button></div></div>
+</aside>
+<main id="main-content" tabindex="-1">
+  <header class="topbar"><button id="open-menu" class="icon-button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="sidebar">☰</button><div class="breadcrumb"><span class="muted">Запуски</span><span class="divider">/</span><strong id="run-title">Завантаження…</strong><span class="divider">/</span><span id="breadcrumb-view">Огляд</span></div><div class="topbar-actions"><button id="theme-toggle" class="icon-button" aria-label="Увімкнути темну тему" title="Змінити тему">◐</button><span class="readonly">Лише перегляд</span></div></header>
+  <div class="page">
+    <div class="title-row"><div><div class="eyebrow">ARENA / PRISM</div><h1 id="page-title">Огляд запуску</h1><p id="page-description">Результати, прогрес і ресурси — в одному місці.</p></div><div class="actions"><button id="export" disabled>↓ Експорт</button><button id="refresh" class="primary">↻ Оновити дані</button></div></div>
+    <div class="scopebar"><div class="scope-info"><div id="run-status"></div><span id="subtitle">Читаємо локальні дані…</span></div><label class="lineage-label">Лінія агента<select id="lineage" aria-label="Лінія агента"></select></label><label class="auto"><input id="auto" type="checkbox"> Автооновлення</label><span id="updated" aria-live="polite">—</span></div>
+    <div id="error" class="notice error" role="alert" hidden></div><div id="warnings" aria-live="polite"></div>
+    <div id="content" hidden>
+      <section id="overview" class="tab-panel" aria-label="Огляд запуску">
+        <div id="run-story" class="run-story"></div><div class="cards" id="cards"></div>
+        <div class="overview-grid">
+          <article class="panel chart-panel"><div class="panel-heading"><div><h2 id="chart-title">Траєкторія якості</h2><p id="chart-description">Частка правильних відповідей · selection suite</p></div><select id="chart-metric" aria-label="Метрика графіка"><option value="quality">Якість</option><option value="cost">Вартість</option></select></div><div id="chart"></div><div id="chart-legend" class="legend"><span><i class="line-symbol"></i> Прийняте рішення</span><span><i class="dot-symbol"></i> Кандидат</span></div><div id="chart-caption" class="chart-caption"></div></article>
+          <article class="panel"><div class="panel-heading"><div><h2>Ресурси</h2><p>Використано / доступний ліміт</p></div><span class="subtle-tag">Поточна лінія</span></div><div id="resources"></div><p class="fine-print">Витрати за обліком Arena. Вартість — оцінка за тарифами, compute — округлений час виконання.</p></article>
+        </div>
+        <article class="panel recent"><div class="panel-heading"><div><h2>Останні спроби</h2><p>Відкрийте спробу, щоб побачити рішення та зміни.</p></div><button id="all-attempts" class="text-button">Усі спроби →</button></div><div id="recent-table" class="table-wrap"></div></article>
+      </section>
+      <section id="attempts" class="tab-panel" hidden aria-label="Спроби">
+        <div class="filterbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="attempt-search" type="search" placeholder="Номер або причина рішення…" aria-label="Пошук спроб"></label><select id="status-filter" aria-label="Статус спроби"><option value="">Усі статуси</option><option value="accepted">Прийнято</option><option value="rejected">Відхилено</option><option value="failed">Помилка</option><option value="interrupted">Перервано</option><option value="running">Виконується</option></select><select id="attempt-order" aria-label="Порядок спроб"><option value="newest">Спочатку нові</option><option value="oldest">Спочатку старі</option></select><button id="reset-attempts" class="text-button">Скинути</button><span id="attempt-summary" class="muted"></span></div>
+        <article class="panel"><div id="attempt-table" class="table-wrap"></div></article>
+      </section>
+      <section id="events" class="tab-panel" hidden aria-label="Журнал подій">
+        <div class="filterbar"><label class="search-field"><span aria-hidden="true">⌕</span><input id="event-search" type="search" placeholder="Знайти подію або інструмент…" aria-label="Пошук подій"></label><select id="event-attempt" aria-label="Спроба в журналі"><option value="">Усі спроби</option></select><select id="event-type" aria-label="Категорія подій"><option value="">Усі події</option><option value="provider">Модель</option><option value="tool">Інструменти</option><option value="budget">Ресурси</option><option value="other">Інші події</option></select><button id="reset-events" class="text-button">Скинути</button></div>
+        <article class="panel"><div class="panel-heading"><h2>Хронологія</h2><span class="subtle-tag">Час браузера</span></div><div id="event-summary" class="fine-print"></div><div id="event-list"></div><button id="more-events" hidden>Показати ще 100</button></article>
+      </section>
+      <section id="versions" class="tab-panel" hidden aria-label="Версії коду">
+        <article class="panel"><div class="panel-heading"><div><h2>Порівняти дві версії</h2><p>Оберіть знімки коду в межах поточної лінії.</p></div><span class="file-tag">solver.py</span></div><div class="compare-controls"><label>Початкова версія<select id="version-before" aria-label="Початкова версія"></select></label><button id="swap-versions" class="icon-button" aria-label="Поміняти версії місцями" title="Поміняти місцями">⇄</button><label>Кінцева версія<select id="version-after" aria-label="Кінцева версія"></select></label></div><div id="version-note" class="fine-print"></div><div class="code-grid"><div><h3 id="before-title">До</h3><pre id="before-code"></pre></div><div><h3 id="after-title">Після</h3><pre id="after-code"></pre></div></div><h3>Відмінності обраних версій</h3><pre id="version-diff" class="diff"></pre></article>
+      </section>
+      <section id="evidence" class="tab-panel" hidden aria-label="Контекст і докази">
+        <div class="lower-grid"><article class="panel"><div class="panel-heading"><div><h2>Паспорт запуску</h2><p>Умови, джерело та ідентичність даних.</p></div></div><dl id="context"></dl></article><article class="panel"><h2>Доступні вимірювання</h2><div class="not-measured"><span>Поведінкова відстань</span><span class="tag">Не виміряно</span></div><div class="not-measured"><span>Архітектурна подібність</span><span class="tag">Не виміряно</span></div><p class="fine-print">Для поведінкових метрик потрібні узгоджені результати окремих тестових випадків. Якість рішення та зміни коду самі по собі не доводять конвергенцію.</p></article></div>
+        <article class="panel recent"><h2>Цілісність даних за спробами</h2><p>Перевірка контрольних сум засвідчує узгодженість даних, а не автентичність автора.</p><div id="integrity-table" class="table-wrap"></div></article>
+      </section>
+    </div>
+    <footer><span>PRISM · Independent measurement</span><button id="footer-help" class="text-button">Довідка з навігації <kbd>?</kbd></button></footer>
+  </div>
+</main>
+<dialog id="detail" aria-labelledby="detail-title">
+  <div class="dialog-head"><div><div class="eyebrow">ДЕТАЛІ СПРОБИ</div><h2 id="detail-title"></h2></div><button id="close-detail" class="icon-button" aria-label="Закрити деталі">×</button></div>
+  <div class="detail-nav"><button id="previous-attempt">← Попередня</button><span id="detail-position"></span><button id="next-attempt">Наступна →</button></div>
+  <div id="detail-body"></div><div class="detail-links"><button id="detail-events">Події цієї спроби →</button><button id="detail-code">Перейти до коду →</button></div>
+  <div class="note-section"><h3>Нотатка дослідника</h3><p class="fine-print">Лише в цьому браузері. Додається до експорту; оригінальні дані не змінюються.</p><textarea id="note" rows="4" maxlength="10000" placeholder="Спостереження, питання, наступні кроки…" aria-label="Нотатка дослідника"></textarea><span id="note-status" class="fine-print" aria-live="polite"></span></div>
+</dialog>
+<dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-head"><h2 id="help-title">Навігація у Prism</h2><button id="close-help" class="icon-button" aria-label="Закрити довідку">×</button></div><p>Оберіть запуск ліворуч, лінію агента — над робочою областю.</p><dl class="shortcuts"><dt><kbd>/</kbd></dt><dd>Пошук у поточному розділі</dd><dt><kbd>Esc</kbd></dt><dd>Закрити панель деталей</dd><dt><kbd>?</kbd></dt><dd>Ця довідка</dd></dl><p>Розділ, лінія та фільтри зберігаються в адресі сторінки. Можна оновити сторінку або повернутися кнопкою браузера «Назад».</p><p>У деталях спроби переходьте до сусідніх спроб, її подій або версії коду.</p></dialog>
+</body></html>

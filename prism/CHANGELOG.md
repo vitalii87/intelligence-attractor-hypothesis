@@ -1,5 +1,21 @@
 # PRISM changelog
 
+## 0.4.0 — 2026-11-07
+
+- Add an independent read-only local viewer for Arena integer-sum iterative runs.
+- Verify checkpoints, configuration, event chains and accepted artifacts; retain
+  explicit unavailable/partial/error states and bounded, confined filesystem reads.
+- Show quality and resource charts, attempts, event payloads, version comparisons,
+  local researcher notes and JSON export without executing imported code.
+- Add a Ukrainian interface with persistent section/run navigation, searchable
+  lists, URL-restored filters, light/dark themes and a responsive mobile menu.
+- Link the attempt side panel to its events and code, with adjacent-attempt
+  navigation and a dedicated context/evidence section.
+- Provide a PowerShell launcher, a loopback-only server and 16 additional tests.
+
+The viewer reads saved observations; no paid model calls or automatic scientific
+distance calculations are made. See [viewer usage and limits](VIEWER.md).
+
 ## 0.3.0 — 2026-10-31
 
 - Add exact string-output disagreement over declared case/replicate keys.

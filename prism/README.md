@@ -1,6 +1,6 @@
 # PRISM
 
-**Version 0.3.0 — first behavioral measurement and verified artifact import.** PRISM is a working
+**Version 0.4.0 — local experiment viewer and verified artifact import.** PRISM is a working
 name; name/package availability has not been checked. Distribution: `iah-prism`;
 Python import: `prism`. Uses Python 3.11+, standard library only at runtime.
 
@@ -17,10 +17,16 @@ convergence, divergence, persistent differences and insufficient evidence equall
 - Deterministic JSON report serialization and contract tests.
 - Read-only Arena ArtifactStore importer, evidence verification and dataset manifest.
 - `python -m prism import-arena` CLI; see [import instructions](IMPORTING.md).
+- Read-only local GUI with run/lineage navigation, quality and resource charts,
+  searchable attempts/events, source comparisons and local review notes.
+  Start with `./prism/Start-Prism.ps1` from the repository root;
+  see [viewer instructions](VIEWER.md).
 
 Exact output disagreement with explicit case/replicate alignment and coverage is
 implemented as a Python API; see [behavior measurements](BEHAVIOR.md). Architectural
-metrics, statistical inference and visualization are not implemented yet. The importer verifies evidence hashes, but record constructors
+metrics and statistical inference are not implemented yet. The viewer displays saved
+quality and resources; it does not calculate behavioral distance automatically.
+The importer verifies evidence hashes, but record constructors
 alone only validate hash syntax. The compatibility helper is a prerequisite check,
 not proof of a fair experimental comparison. Full run/observation import and
 experiment manifests remain work described in REQUIREMENTS.md.
